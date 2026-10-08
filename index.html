@@ -1113,6 +1113,7 @@ async function prepararPartida() {
 
     const resultado = await llamarAPI(
       'finalizarParticipacion',
+      sesionActual.token,
       participacionActual
     );
 
