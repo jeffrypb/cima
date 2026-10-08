@@ -1154,6 +1154,7 @@ async function prepararPartida() {
 
     const resultado = await llamarAPI(
       'obtenerRankingPublicoCliente',
+      sesionActual.token,
       participacionActual
     );
 
