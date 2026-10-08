@@ -1,11 +1,1341 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <base target="_top">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
   <title>Cima</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 520px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.08);
+    }
+
+    .pantalla {
+      display: none;
+    }
+
+    .pantalla.activa {
+      display: block;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      margin-bottom: 5px;
+    }
+
+    .logo p {
+      margin: 0;
+      color: #777;
+    }
+
+    .negocio-info {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .negocio-nombre {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .sucursal {
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .campo {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #222;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .boton-secundario {
+      background: #eee;
+      color: #222;
+    }
+
+    .mensaje {
+      padding: 14px;
+      border-radius: 9px;
+      background: #f0f0f0;
+      margin-bottom: 18px;
+    }
+
+    .error {
+      color: #b00020;
+      margin-top: 12px;
+    }
+
+    .pregunta {
+      margin-bottom: 28px;
+    }
+
+    .pregunta-texto {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .opcion {
+      display: block;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-weight: normal;
+    }
+
+    .opcion input {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    .resultado-puntos {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      margin: 25px 0;
+    }
+
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .ranking-posicion {
+      font-weight: bold;
+      width: 45px;
+    }
+
+    .ranking-nombre {
+      flex: 1;
+    }
+
+    .ranking-puntos {
+      font-weight: bold;
+    }
+
+    .mi-posicion {
+      background: #f0f0f0;
+      padding: 14px;
+      border-radius: 9px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .cargando {
+      text-align: center;
+      color: #777;
+      padding: 30px 0;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>CIMA</h1>
-  <p>Frontend conectado a GitHub Pages.</p>
+
+<div class="contenedor">
+
+  <!-- =====================================================
+       ENCABEZADO
+       ===================================================== -->
+
+  <div class="logo">
+    <h1>Cima</h1>
+    <p>Sube en el ranking</p>
+  </div>
+
+
+  <!-- =====================================================
+       PANTALLA 1 — CARGANDO QR
+       ===================================================== -->
+
+  <section id="pantallaCarga" class="pantalla activa">
+
+    <div class="cargando">
+      Cargando...
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 2 — INFORMACIÓN DEL NEGOCIO
+       ===================================================== -->
+
+  <section id="pantallaInicio" class="pantalla">
+
+    <div class="negocio-info">
+
+      <div
+        id="nombreNegocio"
+        class="negocio-nombre">
+      </div>
+
+      <div
+        id="nombreSucursal"
+        class="sucursal">
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      onclick="mostrarPantalla('pantallaRegistro')">
+      Soy nuevo
+    </button>
+
+    <button
+      type="button"
+      class="boton-secundario"
+      onclick="mostrarPantalla('pantallaIdentificacion')">
+      Ya estoy registrado
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 3 — REGISTRO
+       ===================================================== -->
+
+  <section id="pantallaRegistro" class="pantalla">
+
+    <h2>Crear registro</h2>
+
+    <p>
+      Completa tus datos para comenzar.
+    </p>
+
+    <form id="formRegistro">
+
+      <div class="campo">
+
+        <label for="registroNombre">
+          Nombre
+        </label>
+
+        <input
+          type="text"
+          id="registroNombre"
+          required>
+
+      </div>
+
+      <div class="campo">
+
+        <label for="registroTelefono">
+          Teléfono
+        </label>
+
+        <input
+          type="tel"
+          id="registroTelefono"
+          required>
+
+      </div>
+
+      <div class="campo">
+
+        <label for="registroEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="registroEmail"
+          required>
+
+      </div>
+
+      <div class="campo">
+
+        <label for="registroNacimiento">
+          Fecha de nacimiento
+        </label>
+
+        <input
+          type="date"
+          id="registroNacimiento">
+
+      </div>
+
+      <button
+        type="submit"
+        id="botonRegistro">
+        Continuar
+      </button>
+
+    </form>
+
+    <div
+      id="errorRegistro"
+      class="error">
+    </div>
+
+    <button
+      type="button"
+      class="boton-secundario"
+      onclick="mostrarPantalla('pantallaInicio')">
+      Volver
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 4 — IDENTIFICACIÓN
+       ===================================================== -->
+
+  <section id="pantallaIdentificacion" class="pantalla">
+
+    <h2>Ingresar</h2>
+
+    <p>
+      Ingresa tu teléfono y email para continuar.
+    </p>
+
+    <form id="formIdentificacion">
+
+      <div class="campo">
+
+        <label for="identificacionTelefono">
+          Teléfono
+        </label>
+
+        <input
+          type="tel"
+          id="identificacionTelefono"
+          required>
+
+      </div>
+
+      <div class="campo">
+
+        <label for="identificacionEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="identificacionEmail"
+          required>
+
+      </div>
+
+      <button
+        type="submit"
+        id="botonIdentificacion">
+        Continuar
+      </button>
+
+    </form>
+
+    <div
+      id="errorIdentificacion"
+      class="error">
+    </div>
+
+    <button
+      type="button"
+      class="boton-secundario"
+      onclick="mostrarPantalla('pantallaInicio')">
+      Volver
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 5 — CARGANDO PARTIDA
+       ===================================================== -->
+
+  <section id="pantallaPreparando" class="pantalla">
+
+    <div class="cargando">
+
+      <h2>Preparando tu partida</h2>
+
+      <p>
+        Estamos seleccionando tus preguntas...
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 6 — JUEGO
+       ===================================================== -->
+
+  <section id="pantallaJuego" class="pantalla">
+
+    <h2>Tu partida</h2>
+
+    <div
+      id="contenedorPreguntas">
+    </div>
+
+    <button
+      type="button"
+      id="botonEnviarRespuestas"
+      onclick="enviarRespuestas()">
+      Enviar respuestas
+    </button>
+
+    <div
+      id="errorJuego"
+      class="error">
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 7 — PROCESANDO
+       ===================================================== -->
+
+  <section id="pantallaProcesando" class="pantalla">
+
+    <div class="cargando">
+
+      <h2>Procesando</h2>
+
+      <p>
+        Estamos calculando tus puntos...
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 8 — RESULTADO
+       ===================================================== -->
+
+  <section id="pantallaResultado" class="pantalla">
+
+    <h2>¡Partida completada!</h2>
+
+    <div
+      id="resultadoPuntos"
+      class="resultado-puntos">
+      0 puntos
+    </div>
+
+    <p style="text-align:center;">
+      Cargando ranking...
+    </p>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 9 — RANKING
+       ===================================================== -->
+
+  <section id="pantallaRanking" class="pantalla">
+
+    <h2>Ranking del mes</h2>
+
+    <div
+      id="miPosicion"
+      class="mi-posicion">
+    </div>
+
+    <div
+      id="listaRanking">
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PANTALLA 10 — ERROR GENERAL
+       ===================================================== -->
+
+  <section id="pantallaError" class="pantalla">
+
+    <h2>Algo salió mal</h2>
+
+    <div
+      id="mensajeError"
+      class="mensaje">
+    </div>
+
+    <button
+      type="button"
+      onclick="location.reload()">
+      Intentar nuevamente
+    </button>
+
+  </section>
+
+</div>
+
+
+<script>
+
+  /* =====================================================
+     ESTADO DE LA APLICACIÓN
+     ===================================================== */
+  const API_URL = 'https://cima-api.jeffryblnc.workers.dev/';
+
+  async function llamarAPI(accion, ...args) {
+    const respuesta = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        accion: accion,
+        args: args
+      })
+    });
+
+    const resultado = await respuesta.json();
+
+    if (!resultado.ok) {
+      throw new Error(resultado.error || 'Error en la API');
+    }
+
+    return resultado.datos;
+  }
+
+  const parametrosURL =
+  new URLSearchParams(window.location.search);
+
+const codigoQR =
+  parametrosURL.get('qr');
+
+  let informacionQR = null;
+
+  let clienteActual = null;
+
+  let sesionActual = null;
+
+  let participacionActual = null;
+
+  let preguntasActuales = [];
+
+  let respuestasActuales = [];
+
+
+  /* =====================================================
+     INICIO
+     ===================================================== */
+
+  iniciarAplicacion();
+
+
+async function iniciarAplicacion() {
+
+  if (!codigoQR) {
+
+    mostrarError(
+      'No se recibió un código QR válido.'
+    );
+
+    return;
+  }
+
+  try {
+
+    const resultado = await llamarAPI(
+      'obtenerInformacionPublicaQR',
+      codigoQR
+    );
+
+    cargarInformacionQR(resultado);
+
+  } catch (error) {
+
+    mostrarErrorTecnico(error);
+
+  }
+}
+
+
+  /* =====================================================
+     INFORMACIÓN DEL QR
+     ===================================================== */
+
+  function cargarInformacionQR(
+    informacion
+  ) {
+
+    informacionQR = informacion;
+
+    document.getElementById(
+      'nombreNegocio'
+    ).textContent =
+      informacion.negocio;
+
+    document.getElementById(
+      'nombreSucursal'
+    ).textContent =
+      informacion.sucursal;
+
+    mostrarPantalla(
+      'pantallaInicio'
+    );
+  }
+
+
+  /* =====================================================
+     NAVEGACIÓN
+     ===================================================== */
+
+  function mostrarPantalla(
+    idPantalla
+  ) {
+
+    const pantallas =
+      document.querySelectorAll(
+        '.pantalla'
+      );
+
+    pantallas.forEach(
+      pantalla => {
+        pantalla.classList.remove(
+          'activa'
+        );
+      }
+    );
+
+    const pantalla =
+      document.getElementById(
+        idPantalla
+      );
+
+    if (pantalla) {
+      pantalla.classList.add(
+        'activa'
+      );
+    }
+
+    window.scrollTo(
+      0,
+      0
+    );
+  }
+
+
+  /* =====================================================
+     REGISTRO DE CLIENTE
+     ===================================================== */
+
+  document.getElementById(
+    'formRegistro'
+  ).addEventListener(
+    'submit',
+    registrarCliente
+  );
+
+
+  async function registrarCliente(
+  evento
+) {
+
+  evento.preventDefault();
+
+  limpiarError(
+    'errorRegistro'
+  );
+
+  const boton =
+    document.getElementById(
+      'botonRegistro'
+    );
+
+  boton.disabled = true;
+
+  boton.textContent =
+    'Procesando...';
+
+  const nombre =
+    document.getElementById(
+      'registroNombre'
+    ).value.trim();
+
+  const telefono =
+    document.getElementById(
+      'registroTelefono'
+    ).value.trim();
+
+  const email =
+    document.getElementById(
+      'registroEmail'
+    ).value.trim();
+
+  const fechaNacimiento =
+    document.getElementById(
+      'registroNacimiento'
+    ).value;
+
+  try {
+
+    const resultado = await llamarAPI(
+      'registrarYPrepararCliente',
+      codigoQR,
+      nombre,
+      telefono,
+      email,
+      fechaNacimiento
+    );
+
+    registroExitoso(resultado);
+
+  } catch (error) {
+
+    boton.disabled = false;
+
+    boton.textContent =
+      'Continuar';
+
+    mostrarErrorEnElemento(
+      'errorRegistro',
+      error
+    );
+  }
+}
+
+  function registroExitoso(
+    resultado
+  ) {
+
+    clienteActual =
+      resultado.cliente;
+
+    sesionActual =
+      resultado.sesion;
+
+    mostrarPantalla(
+      'pantallaPreparando'
+    );
+
+    prepararPartida();
+  }
+
+
+  /* =====================================================
+     IDENTIFICACIÓN DE CLIENTE
+     ===================================================== */
+
+  document.getElementById(
+    'formIdentificacion'
+  ).addEventListener(
+    'submit',
+    identificarCliente
+  );
+
+
+async function identificarCliente(
+  evento
+) {
+
+  evento.preventDefault();
+
+  limpiarError(
+    'errorIdentificacion'
+  );
+
+  const boton =
+    document.getElementById(
+      'botonIdentificacion'
+    );
+
+  boton.disabled = true;
+
+  boton.textContent =
+    'Verificando...';
+
+  const telefono =
+    document.getElementById(
+      'identificacionTelefono'
+    ).value.trim();
+
+  const email =
+    document.getElementById(
+      'identificacionEmail'
+    ).value.trim();
+
+  try {
+
+    const resultado = await llamarAPI(
+      'identificarYPrepararCliente',
+      codigoQR,
+      telefono,
+      email
+    );
+
+    identificacionExitosa(resultado);
+
+  } catch (error) {
+
+    boton.disabled = false;
+
+    boton.textContent =
+      'Continuar';
+
+    mostrarErrorEnElemento(
+      'errorIdentificacion',
+      error
+    );
+  }
+}
+
+
+  function identificacionExitosa(
+    resultado
+  ) {
+
+    clienteActual =
+      resultado.cliente;
+
+    sesionActual =
+      resultado.sesion;
+
+    mostrarPantalla(
+      'pantallaPreparando'
+    );
+
+    prepararPartida();
+  }
+
+
+  /* =====================================================
+     PREPARAR PARTIDA
+     ===================================================== */
+async function prepararPartida() {
+
+  try {
+
+    const resultado = await llamarAPI(
+      'iniciarPartidaCliente',
+      sesionActual.token
+    );
+
+    partidaPreparada(resultado);
+
+  } catch (error) {
+
+    mostrarErrorTecnico(error);
+
+  }
+}
+
+
+  function partidaPreparada(
+    resultado
+  ) {
+
+    participacionActual =
+      resultado.participacion_id;
+
+    preguntasActuales =
+      resultado.preguntas;
+
+    respuestasActuales = [];
+
+    mostrarPreguntas();
+
+    mostrarPantalla(
+      'pantallaJuego'
+    );
+  }
+
+
+  /* =====================================================
+     MOSTRAR PREGUNTAS
+     ===================================================== */
+
+  function mostrarPreguntas() {
+
+    const contenedor =
+      document.getElementById(
+        'contenedorPreguntas'
+      );
+
+    contenedor.innerHTML = '';
+
+    preguntasActuales.forEach(
+      (pregunta, indice) => {
+
+        const bloque =
+          document.createElement(
+            'div'
+          );
+
+        bloque.className =
+          'pregunta';
+
+        bloque.innerHTML = `
+
+          <div class="pregunta-texto">
+            ${indice + 1}.
+            ${escaparHTML(
+              pregunta.pregunta
+            )}
+          </div>
+
+          ${crearOpcion(
+            pregunta,
+            'A',
+            pregunta.opcion_a
+          )}
+
+          ${crearOpcion(
+            pregunta,
+            'B',
+            pregunta.opcion_b
+          )}
+
+          ${crearOpcion(
+            pregunta,
+            'C',
+            pregunta.opcion_c
+          )}
+
+          ${crearOpcion(
+            pregunta,
+            'D',
+            pregunta.opcion_d
+          )}
+
+        `;
+
+        contenedor.appendChild(
+          bloque
+        );
+      }
+    );
+  }
+
+
+  function crearOpcion(
+    pregunta,
+    letra,
+    texto
+  ) {
+
+    return `
+
+      <label class="opcion">
+
+        <input
+          type="radio"
+          name="pregunta_${pregunta.pregunta_id}"
+          value="${letra}">
+
+        ${escaparHTML(texto)}
+
+      </label>
+
+    `;
+  }
+
+
+  /* =====================================================
+     ENVIAR RESPUESTAS
+     ===================================================== */
+
+  function enviarRespuestas() {
+
+    limpiarError(
+      'errorJuego'
+    );
+
+    const respuestas = [];
+
+    for (
+      const pregunta
+      of preguntasActuales
+    ) {
+
+      const seleccionada =
+        document.querySelector(
+          `input[name="pregunta_${pregunta.pregunta_id}"]:checked`
+        );
+
+      if (!seleccionada) {
+
+        mostrarErrorEnElemento(
+          'errorJuego',
+          {
+            message:
+              'Debes responder todas las preguntas.'
+          }
+        );
+
+        return;
+      }
+
+      respuestas.push({
+        pregunta_id:
+          pregunta.pregunta_id,
+
+        respuesta:
+          seleccionada.value
+      });
+    }
+
+    respuestasActuales =
+      respuestas;
+
+    document.getElementById(
+      'botonEnviarRespuestas'
+    ).disabled = true;
+
+    mostrarPantalla(
+      'pantallaProcesando'
+    );
+
+    enviarSiguienteRespuesta(
+      0
+    );
+  }
+
+
+  /* =====================================================
+     PROCESAMIENTO SECUENCIAL
+     ===================================================== */
+
+  async function enviarSiguienteRespuesta(
+  indice
+) {
+
+  if (
+    indice >=
+    respuestasActuales.length
+  ) {
+
+    finalizarPartida();
+
+    return;
+  }
+
+  const respuesta =
+    respuestasActuales[
+      indice
+    ];
+
+  try {
+
+    await llamarAPI(
+      'registrarRespuesta',
+      participacionActual,
+      respuesta.pregunta_id,
+      respuesta.respuesta
+    );
+
+    enviarSiguienteRespuesta(
+      indice + 1
+    );
+
+  } catch (error) {
+
+    mostrarErrorTecnico(error);
+
+  }
+}
+
+
+  /* =====================================================
+     FINALIZAR PARTIDA
+     ===================================================== */
+
+  async function finalizarPartida() {
+
+  try {
+
+    const resultado = await llamarAPI(
+      'finalizarParticipacion',
+      participacionActual
+    );
+
+    partidaFinalizada(resultado);
+
+  } catch (error) {
+
+    mostrarErrorTecnico(error);
+
+  }
+}
+
+
+  function partidaFinalizada(
+    resultado
+  ) {
+
+    document.getElementById(
+      'resultadoPuntos'
+    ).textContent =
+      `${resultado.puntos_obtenidos} puntos`;
+
+    mostrarPantalla(
+      'pantallaResultado'
+    );
+
+    cargarRanking();
+  }
+
+
+  /* =====================================================
+     RANKING
+     ===================================================== */
+
+  async function cargarRanking() {
+
+  try {
+
+    const resultado = await llamarAPI(
+      'obtenerRankingPublicoCliente',
+      participacionActual
+    );
+
+    mostrarRanking(resultado);
+
+  } catch (error) {
+
+    mostrarErrorTecnico(error);
+
+  }
+}
+
+
+  function mostrarRanking(
+    resultado
+  ) {
+
+    const miPosicion =
+      document.getElementById(
+        'miPosicion'
+      );
+
+    const lista =
+      document.getElementById(
+        'listaRanking'
+      );
+
+    miPosicion.innerHTML = '';
+
+    lista.innerHTML = '';
+
+    if (
+      resultado.posicionCliente
+    ) {
+
+      miPosicion.innerHTML = `
+
+        Tu posición actual:
+
+        <strong>
+          #${resultado.posicionCliente.posicion}
+        </strong>
+
+        <br>
+
+        ${resultado.posicionCliente.puntos}
+        puntos
+
+      `;
+    } else {
+
+      miPosicion.textContent =
+        'Todavía no apareces en el ranking.';
+    }
+
+
+    resultado.ranking.forEach(
+      jugador => {
+
+        const elemento =
+          document.createElement(
+            'div'
+          );
+
+        elemento.className =
+          'ranking-item';
+
+        elemento.innerHTML = `
+
+          <div class="ranking-posicion">
+            #${jugador.posicion}
+          </div>
+
+          <div class="ranking-nombre">
+            ${escaparHTML(
+              jugador.nombre
+            )}
+          </div>
+
+          <div class="ranking-puntos">
+            ${jugador.puntos}
+          </div>
+
+        `;
+
+        lista.appendChild(
+          elemento
+        );
+      }
+    );
+
+    mostrarPantalla(
+      'pantallaRanking'
+    );
+  }
+
+
+  /* =====================================================
+     ERRORES
+     ===================================================== */
+
+  function mostrarError(
+    mensaje
+  ) {
+
+    document.getElementById(
+      'mensajeError'
+    ).textContent =
+      mensaje;
+
+    mostrarPantalla(
+      'pantallaError'
+    );
+  }
+
+
+  function mostrarErrorTecnico(
+    error
+  ) {
+
+    const mensaje =
+      error &&
+      error.message
+        ? error.message
+        : 'Ha ocurrido un error inesperado.';
+
+    mostrarError(
+      mensaje
+    );
+  }
+
+
+  function mostrarErrorEnElemento(
+    id,
+    error
+  ) {
+
+    const elemento =
+      document.getElementById(
+        id
+      );
+
+    elemento.textContent =
+      error &&
+      error.message
+        ? error.message
+        : String(error);
+  }
+
+
+  function limpiarError(
+    id
+  ) {
+
+    document.getElementById(
+      id
+    ).textContent = '';
+  }
+
+
+  /* =====================================================
+     SEGURIDAD BÁSICA DE HTML
+     ===================================================== */
+
+  function escaparHTML(
+    texto
+  ) {
+
+    if (
+      texto === null ||
+      texto === undefined
+    ) {
+      return '';
+    }
+
+    return String(texto)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+</script>
+
 </body>
 </html>
