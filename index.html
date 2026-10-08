@@ -1086,7 +1086,7 @@ async function prepararPartida() {
     await llamarAPI(
       'registrarRespuesta',
       sesionActual.token,
-      participacionActual.participacion_id,
+      participacionActual,
       respuesta.pregunta_id,
       respuesta.respuesta
     );
