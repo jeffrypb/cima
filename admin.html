@@ -3,6 +3,2333 @@
 <head>
   <base target="_top">
   <meta charset="UTF-8">
- 
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    }
+
+    .login-box h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+
+    /* APP */
+
+    #appScreen {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 64px;
+      background: #111827;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 64px);
+    }
+
+    .sidebar {
+      width: 230px;
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      padding: 18px 12px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 11px 12px;
+      text-align: left;
+      border-radius: 7px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    .menu-btn:hover,
+    .menu-btn.active {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    /* CONTEXTO */
+
+    .context-bar {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 22px;
+    }
+
+    .context-title {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .context-selectors {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .context-selectors select {
+      min-width: 190px;
+    }
+
+    /* FORMS */
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 7px;
+      background: white;
+    }
+
+    .context-selectors select {
+      width: auto;
+    }
+
+    button.primary {
+      background: #3730a3;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
+    button.danger {
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    /* CARDS */
+
+    .page-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card-label {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 27px;
+      font-weight: bold;
+    }
+
+    /* TABLE */
+
+    .panel {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    /* MESSAGE */
+
+    #message {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      max-width: 350px;
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 8px;
+      display: none;
+      z-index: 100;
+    }
+
+    @media (max-width: 800px) {
+      .sidebar {
+        width: 190px;
+      }
+
+      .user-info span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        overflow-x: auto;
+      }
+
+      .menu-btn {
+        min-width: max-content;
+      }
+
+      .content {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+  <div class="login-box">
+
+    <h1>CIMA</h1>
+    <p>Panel administrativo</p>
+
+    <form id="loginForm">
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input
+          id="loginPassword"
+          type="password"
+          required
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="primary"
+        style="width:100%;"
+      >
+        Iniciar sesión
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- APP -->
+
+<div id="appScreen" class="hidden">
+
+  <div class="topbar">
+
+    <div class="brand">
+      CIMA
+    </div>
+
+    <div class="user-info">
+
+      <span id="userName"></span>
+      <span id="userRole"></span>
+
+      <button
+        class="secondary"
+        onclick="cerrarSesion()"
+      >
+        Salir
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <button
+        class="menu-btn active"
+        onclick="mostrarPagina('dashboard', this)"
+      >
+        Inicio
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('ranking', this)"
+      >
+        Ranking
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('clientes', this)"
+      >
+        Clientes
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('preguntas', this)"
+      >
+        Preguntas
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('premios', this)"
+      >
+        Premios
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('rifas', this)"
+      >
+        Rifas
+      </button>
+
+      <button
+        class="menu-btn"
+        onclick="mostrarPagina('sucursales', this)"
+      >
+        Sucursales / QR
+      </button>
+
+      <button
+        id="configMenu"
+        class="menu-btn"
+        onclick="mostrarPagina('configuracion', this)"
+      >
+        Configuración
+      </button>
+
+    </aside>
+
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+      <!-- CONTEXTO -->
+
+      <div class="context-bar">
+
+        <div class="context-title">
+          CONTEXTO ACTUAL
+        </div>
+
+        <div class="context-selectors">
+
+          <select
+            id="empresaSelector"
+            class="hidden"
+            onchange="cambiarEmpresa()"
+          >
+            <option value="">
+              Seleccionar empresa
+            </option>
+          </select>
+
+          <select
+            id="negocioSelector"
+            class="hidden"
+            onchange="cambiarNegocio()"
+          >
+            <option value="">
+              Seleccionar negocio
+            </option>
+          </select>
+
+          <select
+            id="sucursalSelector"
+            class="hidden"
+            onchange="cambiarSucursal()"
+          >
+            <option value="">
+              Seleccionar sucursal
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- DASHBOARD -->
+
+      <section id="page-dashboard">
+
+        <h1 class="page-title">
+          Inicio
+        </h1>
+
+        <div class="cards">
+
+          <div class="card">
+            <div class="card-label">
+              Empresa
+            </div>
+            <div
+              id="dashboardEmpresa"
+              class="card-value"
+              style="font-size:18px;"
+            >
+              -
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">
+              Negocio
+            </div>
+            <div
+              id="dashboardNegocio"
+              class="card-value"
+              style="font-size:18px;"
+            >
+              -
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">
+              Sucursal
+            </div>
+            <div
+              id="dashboardSucursal"
+              class="card-value"
+              style="font-size:18px;"
+            >
+              -
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">
+              Sucursales disponibles
+            </div>
+            <div
+              id="dashboardSucursales"
+              class="card-value"
+            >
+              0
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RANKING -->
+
+      <section id="page-ranking" class="hidden">
+
+        <h1 class="page-title">
+          Ranking mensual
+        </h1>
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Posición</th>
+                <th>Cliente</th>
+                <th>Puntos</th>
+              </tr>
+            </thead>
+
+            <tbody id="rankingTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- CLIENTES -->
+
+      <section id="page-clientes" class="hidden">
+
+        <h1 class="page-title">
+          Clientes
+        </h1>
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Registro</th>
+              </tr>
+            </thead>
+
+            <tbody id="clientesTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- PREGUNTAS -->
+
+      <section id="page-preguntas" class="hidden">
+
+        <h1 class="page-title">
+          Preguntas
+        </h1>
+
+        <div class="panel">
+
+          <h3>Nueva pregunta</h3>
+
+          <div class="form-group">
+            <label>Tipo</label>
+
+            <select id="preguntaTipo">
+              <option value="NEGOCIO">
+                Pregunta del negocio
+              </option>
+              <option value="GENERAL">
+                Pregunta general
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+
+            <label>Pregunta</label>
+
+            <input
+              id="preguntaTexto"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Opción A</label>
+
+            <input
+              id="preguntaA"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Opción B</label>
+
+            <input
+              id="preguntaB"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Opción C</label>
+
+            <input
+              id="preguntaC"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Opción D</label>
+
+            <input
+              id="preguntaD"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Respuesta correcta</label>
+
+            <select id="preguntaCorrecta">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Puntos</label>
+
+            <input
+              id="preguntaPuntos"
+              type="number"
+              min="0"
+              value="10"
+            >
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="crearPregunta()"
+          >
+            Crear pregunta
+          </button>
+
+        </div>
+
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Pregunta</th>
+                <th>Puntos</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody id="preguntasTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- PREMIOS -->
+
+      <section id="page-premios" class="hidden">
+
+        <h1 class="page-title">
+          Premios
+        </h1>
+
+        <div class="panel">
+
+          <h3>Nuevo premio</h3>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input id="premioNombre">
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <input id="premioDescripcion">
+          </div>
+
+          <div class="form-group">
+            <label>Tipo</label>
+            <input id="premioTipo">
+          </div>
+
+          <div class="form-group">
+            <label>Cantidad disponible</label>
+            <input
+              id="premioCantidad"
+              type="number"
+              min="0"
+              value="1"
+            >
+          </div>
+
+          <button
+            class="primary"
+            onclick="crearPremio()"
+          >
+            Crear premio
+          </button>
+
+        </div>
+
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody id="premiosTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- RIFAS -->
+
+      <section id="page-rifas" class="hidden">
+
+        <h1 class="page-title">
+          Rifas
+        </h1>
+
+        <div class="panel">
+
+          <h3>Nueva rifa</h3>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input id="rifaNombre">
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <input id="rifaDescripcion">
+          </div>
+
+          <div class="form-group">
+            <label>Periodo</label>
+            <input
+              id="rifaPeriodo"
+              placeholder="Ej. Octubre 2026"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Premio</label>
+            <input id="rifaPremio">
+          </div>
+
+          <div class="form-group">
+            <label>Fecha inicio</label>
+            <input
+              id="rifaInicio"
+              type="date"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Fecha fin</label>
+            <input
+              id="rifaFin"
+              type="date"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Fecha sorteo</label>
+            <input
+              id="rifaSorteo"
+              type="date"
+            >
+          </div>
+
+          <button
+            class="primary"
+            onclick="crearRifa()"
+          >
+            Crear rifa
+          </button>
+
+        </div>
+
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Periodo</th>
+                <th>Premio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody id="rifasTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUCURSALES -->
+
+      <section id="page-sucursales" class="hidden">
+
+        <h1 class="page-title">
+          Sucursales y QR
+        </h1>
+
+        <div class="panel">
+
+          <h3>Nueva sucursal</h3>
+
+          <div class="form-group">
+
+            <label>Nombre</label>
+
+            <input id="sucursalNombre">
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Dirección</label>
+
+            <input id="sucursalDireccion">
+
+          </div>
+
+          <button
+            class="primary"
+            onclick="crearSucursal()"
+          >
+            Crear sucursal
+          </button>
+
+        </div>
+
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>QR</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="sucursalesTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- CONFIGURACIÓN -->
+
+      <section id="page-configuracion" class="hidden">
+
+        <h1 class="page-title">
+          Configuración
+        </h1>
+
+        <div class="panel">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Clave</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="configTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+
+<div id="message"></div>
+
+
+<script>
+
+let tokenAdmin = localStorage.getItem('cima_admin_token') || '';
+
+let contextoAdmin = null;
+
+let seleccion = {
+  empresaId: '',
+  negocioId: '',
+  sucursalId: ''
+};
+
+
+/* =========================
+   UTILIDADES
+========================= */
+
+function mostrarMensaje(texto) {
+
+  const elemento = document.getElementById('message');
+
+  elemento.textContent = texto;
+  elemento.style.display = 'block';
+
+  setTimeout(() => {
+    elemento.style.display = 'none';
+  }, 3500);
+}
+
+
+function escapar(texto) {
+
+  if (texto === null || texto === undefined) {
+    return '';
+  }
+
+  return String(texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+
+async function ejecutar(nombre, ...args) {
+
+  const respuesta = await fetch(
+    'https://cima-api.jeffryblnc.workers.dev/',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        accion: nombre,
+        args: args
+      })
+    }
+  );
+
+  const resultado = await respuesta.json();
+
+  if (!resultado.ok) {
+    throw new Error(
+      resultado.error || 'Error en la API'
+    );
+  }
+
+  return resultado.datos;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+document
+  .getElementById('loginForm')
+  .addEventListener('submit', async function(event) {
+
+    event.preventDefault();
+
+    const email =
+      document.getElementById('loginEmail').value.trim();
+
+    const password =
+      document.getElementById('loginPassword').value;
+
+    try {
+
+      const resultado =
+        await ejecutar(
+          'iniciarSesionAdmin',
+          email,
+          password
+        );
+
+      tokenAdmin = resultado.token;
+
+      localStorage.setItem(
+        'cima_admin_token',
+        tokenAdmin
+      );
+
+      await cargarAplicacion();
+
+    } catch (error) {
+
+      mostrarMensaje(
+        error.message || 'No fue posible iniciar sesión.'
+      );
+
+    }
+
+  });
+
+
+async function cargarAplicacion() {
+
+  try {
+
+    const sesion =
+      await ejecutar(
+        'validarSesionAdmin',
+        tokenAdmin
+      );
+
+    document
+      .getElementById('loginScreen')
+      .classList.add('hidden');
+
+    document
+      .getElementById('appScreen')
+      .classList.remove('hidden');
+
+    document.getElementById('userName').textContent =
+      sesion.usuario.nombre;
+
+    document.getElementById('userRole').textContent =
+      sesion.usuario.rol;
+
+    contextoAdmin =
+      await ejecutar(
+        'obtenerContextoAdmin',
+        tokenAdmin
+      );
+
+    configurarContexto();
+
+    await cargarDashboard();
+
+  } catch (error) {
+
+    cerrarSesionLocal();
+
+    mostrarMensaje(
+      error.message || 'La sesión no es válida.'
+    );
+
+  }
+
+}
+
+
+/* =========================
+   CONTEXTO
+========================= */
+
+function configurarContexto() {
+
+  const rol =
+    contextoAdmin.usuario.rol;
+
+  const empresaSelector =
+    document.getElementById('empresaSelector');
+
+  const negocioSelector =
+    document.getElementById('negocioSelector');
+
+  const sucursalSelector =
+    document.getElementById('sucursalSelector');
+
+
+  empresaSelector.classList.add('hidden');
+  negocioSelector.classList.add('hidden');
+  sucursalSelector.classList.add('hidden');
+
+
+  if (rol === 'SUPERADMIN') {
+
+    empresaSelector.classList.remove('hidden');
+
+    llenarSelect(
+      empresaSelector,
+      contextoAdmin.empresas,
+      'empresa_id',
+      'nombre'
+    );
+
+    if (contextoAdmin.empresas.length) {
+
+      seleccion.empresaId =
+        contextoAdmin.empresas[0].empresa_id;
+
+      empresaSelector.value =
+        seleccion.empresaId;
+
+      cargarNegociosPorEmpresa();
+
+    }
+
+  }
+
+
+  if (rol === 'EMPRESA_ADMIN') {
+
+    negocioSelector.classList.remove('hidden');
+
+    llenarSelect(
+      negocioSelector,
+      contextoAdmin.negocios,
+      'negocio_id',
+      'nombre'
+    );
+
+    if (contextoAdmin.negocios.length) {
+
+      seleccion.negocioId =
+        contextoAdmin.negocios[0].negocio_id;
+
+      negocioSelector.value =
+        seleccion.negocioId;
+
+      cargarSucursalesPorNegocio();
+
+    }
+
+  }
+
+
+  if (rol === 'NEGOCIO_ADMIN') {
+
+    negocioSelector.classList.remove('hidden');
+
+    llenarSelect(
+      negocioSelector,
+      contextoAdmin.negocios,
+      'negocio_id',
+      'nombre'
+    );
+
+    seleccion.negocioId =
+      contextoAdmin.negocio.negocio_id;
+
+    negocioSelector.value =
+      seleccion.negocioId;
+
+    negocioSelector.disabled = true;
+
+    cargarSucursalesPorNegocio();
+
+  }
+
+
+  if (rol === 'SUCURSAL_ADMIN') {
+
+    seleccion.negocioId =
+      contextoAdmin.negocio.negocio_id;
+
+    seleccion.sucursalId =
+      contextoAdmin.sucursal.sucursal_id;
+
+    sucursalSelector.classList.remove('hidden');
+
+    llenarSelect(
+      sucursalSelector,
+      contextoAdmin.sucursales,
+      'sucursal_id',
+      'nombre'
+    );
+
+    sucursalSelector.value =
+      seleccion.sucursalId;
+
+    sucursalSelector.disabled = true;
+
+  }
+
+}
+
+
+function llenarSelect(
+  select,
+  elementos,
+  valor,
+  texto
+) {
+
+  select.innerHTML =
+    '<option value="">Seleccionar</option>';
+
+  elementos.forEach(elemento => {
+
+    const option =
+      document.createElement('option');
+
+    option.value =
+      elemento[valor];
+
+    option.textContent =
+      elemento[texto];
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+async function cambiarEmpresa() {
+
+  seleccion.empresaId =
+    document.getElementById('empresaSelector').value;
+
+  seleccion.negocioId = '';
+  seleccion.sucursalId = '';
+
+  await cargarNegociosPorEmpresa();
+
+}
+
+
+async function cargarNegociosPorEmpresa() {
+
+  const selector =
+    document.getElementById('negocioSelector');
+
+  selector.classList.remove('hidden');
+
+  try {
+
+    const negocios =
+      await ejecutar(
+        'obtenerNegociosAdmin',
+        tokenAdmin,
+        seleccion.empresaId
+      );
+
+    llenarSelect(
+      selector,
+      negocios,
+      'negocio_id',
+      'nombre'
+    );
+
+    if (negocios.length) {
+
+      seleccion.negocioId =
+        negocios[0].negocio_id;
+
+      selector.value =
+        seleccion.negocioId;
+
+      await cargarSucursalesPorNegocio();
+
+    } else {
+
+      document
+        .getElementById('sucursalSelector')
+        .classList.add('hidden');
+
+    }
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+async function cambiarNegocio() {
+
+  seleccion.negocioId =
+    document.getElementById('negocioSelector').value;
+
+  seleccion.sucursalId = '';
+
+  await cargarSucursalesPorNegocio();
+
+}
+
+
+async function cargarSucursalesPorNegocio() {
+
+  const selector =
+    document.getElementById('sucursalSelector');
+
+  selector.classList.remove('hidden');
+
+  try {
+
+    const sucursales =
+      await ejecutar(
+        'obtenerSucursalesAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    llenarSelect(
+      selector,
+      sucursales,
+      'sucursal_id',
+      'nombre'
+    );
+
+    if (sucursales.length) {
+
+      seleccion.sucursalId =
+        sucursales[0].sucursal_id;
+
+      selector.value =
+        seleccion.sucursalId;
+
+    }
+
+    await cargarDashboard();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+function cambiarSucursal() {
+
+  seleccion.sucursalId =
+    document.getElementById('sucursalSelector').value;
+
+  cargarDashboard();
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+async function cargarDashboard() {
+
+  const empresa =
+    contextoAdmin.empresa;
+
+  let negocio = null;
+  let sucursal = null;
+
+  if (seleccion.negocioId) {
+
+    negocio =
+      contextoAdmin.negocios.find(
+        n => n.negocio_id === seleccion.negocioId
+      );
+
+  }
+
+  if (seleccion.sucursalId) {
+
+    sucursal =
+      contextoAdmin.sucursales.find(
+        s => s.sucursal_id === seleccion.sucursalId
+      );
+
+  }
+
+  document.getElementById(
+    'dashboardEmpresa'
+  ).textContent =
+    empresa ? empresa.nombre : '-';
+
+  document.getElementById(
+    'dashboardNegocio'
+  ).textContent =
+    negocio ? negocio.nombre : '-';
+
+  document.getElementById(
+    'dashboardSucursal'
+  ).textContent =
+    sucursal ? sucursal.nombre : '-';
+
+  document.getElementById(
+    'dashboardSucursales'
+  ).textContent =
+    contextoAdmin.sucursales.length;
+
+}
+
+
+/* =========================
+   NAVEGACIÓN
+========================= */
+
+function mostrarPagina(nombre, boton) {
+
+  document
+    .querySelectorAll('main section')
+    .forEach(section => {
+      section.classList.add('hidden');
+    });
+
+  document
+    .getElementById(
+      'page-' + nombre
+    )
+    .classList.remove('hidden');
+
+  document
+    .querySelectorAll('.menu-btn')
+    .forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+  boton.classList.add('active');
+
+
+  if (nombre === 'ranking') {
+    cargarRanking();
+  }
+
+  if (nombre === 'clientes') {
+    cargarClientes();
+  }
+
+  if (nombre === 'preguntas') {
+    cargarPreguntas();
+  }
+
+  if (nombre === 'premios') {
+    cargarPremios();
+  }
+
+  if (nombre === 'rifas') {
+    cargarRifas();
+  }
+
+  if (nombre === 'sucursales') {
+    cargarSucursales();
+  }
+
+  if (nombre === 'configuracion') {
+    cargarConfiguraciones();
+  }
+
+}
+
+
+/* =========================
+   RANKING
+========================= */
+
+async function cargarRanking() {
+
+  const tbody =
+    document.getElementById('rankingTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="3">Cargando...</td></tr>';
+
+  if (!seleccion.negocioId) {
+
+    tbody.innerHTML =
+      '<tr><td colspan="3">Seleccione un negocio.</td></tr>';
+
+    return;
+
+  }
+
+  try {
+
+    const ranking =
+      await ejecutar(
+        'obtenerRankingAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    tbody.innerHTML = '';
+
+    ranking.forEach((item, index) => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${escapar(item.nombre || item.cliente_nombre || '-')}</td>
+        <td>${escapar(item.puntos || item.total_puntos || 0)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!ranking.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="3">No hay datos para el ranking.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="3">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+/* =========================
+   CLIENTES
+========================= */
+
+async function cargarClientes() {
+
+  const tbody =
+    document.getElementById('clientesTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="4">Cargando...</td></tr>';
+
+  try {
+
+    const clientes =
+      await ejecutar(
+        'obtenerClientesAdmin',
+        tokenAdmin,
+        seleccion.negocioId,
+        seleccion.sucursalId
+      );
+
+    tbody.innerHTML = '';
+
+    clientes.forEach(cliente => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(cliente.nombre)}</td>
+        <td>${escapar(cliente.telefono)}</td>
+        <td>${escapar(cliente.email)}</td>
+        <td>${escapar(cliente.fecha_registro)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!clientes.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="4">No hay clientes.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+/* =========================
+   PREGUNTAS
+========================= */
+
+async function cargarPreguntas() {
+
+  const tbody =
+    document.getElementById('preguntasTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="4">Cargando...</td></tr>';
+
+  try {
+
+    const preguntas =
+      await ejecutar(
+        'obtenerPreguntasAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    tbody.innerHTML = '';
+
+    preguntas.forEach(pregunta => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(pregunta.tipo)}</td>
+        <td>${escapar(pregunta.pregunta)}</td>
+        <td>${escapar(pregunta.puntos)}</td>
+        <td>${escapar(pregunta.estado)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!preguntas.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="4">No hay preguntas.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+async function crearPregunta() {
+
+  const tipo =
+    document.getElementById('preguntaTipo').value;
+
+  if (
+    tipo === 'NEGOCIO' &&
+    !seleccion.negocioId
+  ) {
+
+    mostrarMensaje(
+      'Seleccione un negocio.'
+    );
+
+    return;
+
+  }
+
+  try {
+
+    await ejecutar(
+      'crearPreguntaAdmin',
+      tokenAdmin,
+      {
+        tipo: tipo,
+        negocio_id:
+          tipo === 'NEGOCIO'
+            ? seleccion.negocioId
+            : '',
+        pregunta:
+          document.getElementById('preguntaTexto').value,
+        opcion_a:
+          document.getElementById('preguntaA').value,
+        opcion_b:
+          document.getElementById('preguntaB').value,
+        opcion_c:
+          document.getElementById('preguntaC').value,
+        opcion_d:
+          document.getElementById('preguntaD').value,
+        respuesta_correcta:
+          document.getElementById('preguntaCorrecta').value,
+        puntos:
+          Number(
+            document.getElementById('preguntaPuntos').value
+          )
+      }
+    );
+
+    mostrarMensaje(
+      'Pregunta creada correctamente.'
+    );
+
+    cargarPreguntas();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+/* =========================
+   PREMIOS
+========================= */
+
+async function cargarPremios() {
+
+  const tbody =
+    document.getElementById('premiosTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="4">Cargando...</td></tr>';
+
+  try {
+
+    const premios =
+      await ejecutar(
+        'obtenerPremiosAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    tbody.innerHTML = '';
+
+    premios.forEach(premio => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(premio.nombre)}</td>
+        <td>${escapar(premio.tipo)}</td>
+        <td>${escapar(premio.cantidad_disponible)}</td>
+        <td>${escapar(premio.estado)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!premios.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="4">No hay premios.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+async function crearPremio() {
+
+  if (!seleccion.negocioId) {
+
+    mostrarMensaje(
+      'Seleccione un negocio.'
+    );
+
+    return;
+
+  }
+
+  try {
+
+    await ejecutar(
+      'crearPremioAdmin',
+      tokenAdmin,
+      {
+        negocio_id:
+          seleccion.negocioId,
+
+        nombre:
+          document.getElementById('premioNombre').value,
+
+        descripcion:
+          document.getElementById('premioDescripcion').value,
+
+        tipo:
+          document.getElementById('premioTipo').value,
+
+        cantidad_disponible:
+          Number(
+            document.getElementById('premioCantidad').value
+          )
+      }
+    );
+
+    mostrarMensaje(
+      'Premio creado correctamente.'
+    );
+
+    cargarPremios();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+/* =========================
+   RIFAS
+========================= */
+
+async function cargarRifas() {
+
+  const tbody =
+    document.getElementById('rifasTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="4">Cargando...</td></tr>';
+
+  try {
+
+    const rifas =
+      await ejecutar(
+        'obtenerRifasAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    tbody.innerHTML = '';
+
+    rifas.forEach(rifa => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(rifa.nombre)}</td>
+        <td>${escapar(rifa.periodo)}</td>
+        <td>${escapar(rifa.premio)}</td>
+        <td>${escapar(rifa.estado)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!rifas.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="4">No hay rifas.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+async function crearRifa() {
+
+  if (!seleccion.negocioId) {
+
+    mostrarMensaje(
+      'Seleccione un negocio.'
+    );
+
+    return;
+
+  }
+
+  try {
+
+    await ejecutar(
+      'crearRifaAdmin',
+      tokenAdmin,
+      {
+        negocio_id:
+          seleccion.negocioId,
+
+        nombre:
+          document.getElementById('rifaNombre').value,
+
+        descripcion:
+          document.getElementById('rifaDescripcion').value,
+
+        periodo:
+          document.getElementById('rifaPeriodo').value,
+
+        fecha_inicio:
+          document.getElementById('rifaInicio').value,
+
+        fecha_fin:
+          document.getElementById('rifaFin').value,
+
+        fecha_sorteo:
+          document.getElementById('rifaSorteo').value,
+
+        premio:
+          document.getElementById('rifaPremio').value
+      }
+    );
+
+    mostrarMensaje(
+      'Rifa creada correctamente.'
+    );
+
+    cargarRifas();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+/* =========================
+   SUCURSALES / QR
+========================= */
+
+async function cargarSucursales() {
+
+  const tbody =
+    document.getElementById('sucursalesTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="4">Cargando...</td></tr>';
+
+  try {
+
+    const sucursales =
+      await ejecutar(
+        'obtenerSucursalesAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    tbody.innerHTML = '';
+
+    for (const sucursal of sucursales) {
+
+      let qr = null;
+
+      try {
+
+        qr =
+          await ejecutar(
+            'obtenerQRAdminSeguro',
+            tokenAdmin,
+            sucursal.sucursal_id
+          );
+
+      } catch (error) {
+
+        qr = null;
+
+      }
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(sucursal.nombre)}</td>
+        <td>${escapar(sucursal.direccion)}</td>
+        <td>${escapar(sucursal.estado)}</td>
+        <td>
+          ${
+            qr
+              ? escapar(qr.codigo_publico)
+              : '<button class="primary" onclick="crearQR(\'' +
+                sucursal.sucursal_id +
+                '\')">Crear QR</button>'
+          }
+        </td>
+      `;
+
+      tbody.appendChild(fila);
+
+    }
+
+    if (!sucursales.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="4">No hay sucursales.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+async function crearSucursal() {
+
+  if (!seleccion.negocioId) {
+
+    mostrarMensaje(
+      'Seleccione un negocio.'
+    );
+
+    return;
+
+  }
+
+  const nombre =
+    document.getElementById(
+      'sucursalNombre'
+    ).value.trim();
+
+  const direccion =
+    document.getElementById(
+      'sucursalDireccion'
+    ).value.trim();
+
+  if (!nombre) {
+
+    mostrarMensaje(
+      'El nombre es obligatorio.'
+    );
+
+    return;
+
+  }
+
+  try {
+
+    await ejecutar(
+      'crearSucursalAdmin',
+      tokenAdmin,
+      {
+        negocio_id:
+          seleccion.negocioId,
+        nombre: nombre,
+        direccion: direccion
+      }
+    );
+
+    mostrarMensaje(
+      'Sucursal creada correctamente.'
+    );
+
+    contextoAdmin.sucursales =
+      await ejecutar(
+        'obtenerSucursalesAdmin',
+        tokenAdmin,
+        seleccion.negocioId
+      );
+
+    configurarContexto();
+
+    cargarSucursales();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+async function crearQR(sucursalId) {
+
+  try {
+
+    const qr =
+      await ejecutar(
+        'crearQRAdmin',
+        tokenAdmin,
+        sucursalId
+      );
+
+    mostrarMensaje(
+      'QR creado: ' +
+      qr.codigo_publico
+    );
+
+    cargarSucursales();
+
+  } catch (error) {
+
+    mostrarMensaje(error.message);
+
+  }
+
+}
+
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+
+async function cargarConfiguraciones() {
+
+  const tbody =
+    document.getElementById('configTable');
+
+  tbody.innerHTML =
+    '<tr><td colspan="3">Cargando...</td></tr>';
+
+  try {
+
+    const configuraciones =
+      await ejecutar(
+        'obtenerConfiguracionesAdmin',
+        tokenAdmin
+      );
+
+    tbody.innerHTML = '';
+
+    configuraciones.forEach(config => {
+
+      const fila =
+        document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${escapar(config.clave)}</td>
+        <td>${escapar(config.valor)}</td>
+        <td>${escapar(config.tipo_dato)}</td>
+      `;
+
+      tbody.appendChild(fila);
+
+    });
+
+    if (!configuraciones.length) {
+
+      tbody.innerHTML =
+        '<tr><td colspan="3">No hay configuraciones.</td></tr>';
+
+    }
+
+  } catch (error) {
+
+    tbody.innerHTML =
+      `<tr><td colspan="3">${escapar(error.message)}</td></tr>`;
+
+  }
+
+}
+
+
+/* =========================
+   SESIÓN
+========================= */
+
+async function cerrarSesion() {
+
+  try {
+
+    await ejecutar(
+      'cerrarSesionAdmin',
+      tokenAdmin
+    );
+
+  } catch (error) {}
+
+  cerrarSesionLocal();
+
+}
+
+
+function cerrarSesionLocal() {
+
+  localStorage.removeItem(
+    'cima_admin_token'
+  );
+
+  tokenAdmin = '';
+
+  document
+    .getElementById('appScreen')
+    .classList.add('hidden');
+
+  document
+    .getElementById('loginScreen')
+    .classList.remove('hidden');
+
+}
+
+window.addEventListener(
+  'load',
+  function() {
+
+    if (tokenAdmin) {
+      cargarAplicacion();
+    }
+
+  }
+);
+
+</script>
+
+</body>
 </html>
