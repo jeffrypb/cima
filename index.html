@@ -1062,46 +1062,21 @@ async function prepararPartida() {
      PROCESAMIENTO SECUENCIAL
      ===================================================== */
 
-  async function enviarSiguienteRespuesta(
-  indice
-) {
-
-  if (
-    indice >=
-    respuestasActuales.length
-  ) {
-
-    finalizarPartida();
-
-    return;
+  async function enviarSiguienteRespuesta(indice) {
+    try {
+      await llamarAPI(
+        'registrarRespuestas',
+        sesionActual.token,
+        participacionActual,
+        respuestasActuales
+      );
+  
+      await finalizarPartida();
+  
+    } catch (error) {
+      mostrarErrorTecnico(error);
+    }
   }
-
-  const respuesta =
-    respuestasActuales[
-      indice
-    ];
-
-  try {
-
-    await llamarAPI(
-      'registrarRespuesta',
-      sesionActual.token,
-      participacionActual,
-      respuesta.pregunta_id,
-      respuesta.respuesta
-    );
-
-    enviarSiguienteRespuesta(
-      indice + 1
-    );
-
-  } catch (error) {
-
-    mostrarErrorTecnico(error);
-
-  }
-}
-
 
   /* =====================================================
      FINALIZAR PARTIDA
