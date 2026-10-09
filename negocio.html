@@ -1,313 +1,1065 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
   <title>Cima | Panel del negocio</title>
+
   <style>
     :root {
       --primary: #2563eb;
-      --background: #f5f7fb;
+      --primary-light: #eff6ff;
+      --bg: #f3f5f9;
       --surface: #ffffff;
       --text: #172033;
       --muted: #64748b;
       --border: #e2e8f0;
+      --danger: #dc2626;
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--background);
+      background: var(--bg);
       color: var(--text);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      min-height: 100vh;
-    }
-
-    aside {
-      background: #111827;
-      color: white;
-      padding: 24px 16px;
-    }
-
-    .brand {
-      font-size: 25px;
-      font-weight: bold;
-      margin: 0 12px 8px;
-    }
-
-    .subtitle {
-      color: #9ca3af;
-      margin: 0 12px 28px;
-      font-size: 13px;
-    }
-
-    nav button {
-      width: 100%;
-      display: block;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: #d1d5db;
-      padding: 13px 12px;
-      text-align: left;
-      cursor: pointer;
-      margin-bottom: 5px;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
       font-size: 14px;
     }
 
-    nav button.active,
-    nav button:hover {
-      background: #263449;
-      color: white;
-    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
 
-    main { padding: 30px; min-width: 0; }
-
-    header {
+    .login-wrapper {
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
+      justify-content: center;
+      padding: 24px;
     }
 
-    h1 { margin: 0 0 8px; font-size: 27px; }
-    h2 { font-size: 19px; margin-top: 0; }
-    p { color: var(--muted); }
-
-    .card {
+    .login-card {
+      width: 100%;
+      max-width: 420px;
       background: var(--surface);
+      padding: 36px;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 20px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(15, 23, 42, .07);
     }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 13px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .brand-name { font-size: 25px; font-weight: 800; }
+    .brand-subtitle { color: var(--muted); margin-top: 3px; }
+
+    h1, h2, h3, p { margin-top: 0; }
+    .login-card h1 { font-size: 24px; margin-bottom: 8px; }
+    .muted { color: var(--muted); }
+    .login-description { line-height: 1.6; margin-bottom: 26px; }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 43px;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .field { margin-bottom: 18px; }
+
+    .btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-weight: 700;
+      transition: opacity .15s;
+    }
+
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: #e2e8f0; color: #334155; }
+    .btn-full { width: 100%; min-height: 46px; }
+    .error { color: var(--danger); margin-top: 14px; line-height: 1.5; }
+    .success { color: #15803d; }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #111827;
+      color: white;
+      padding: 25px 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .sidebar .brand { padding: 0 10px; margin-bottom: 34px; }
+    .sidebar .brand-mark { background: #2563eb; }
+    .sidebar .brand-name { font-size: 23px; }
+    .sidebar .brand-subtitle { color: #94a3b8; font-size: 12px; }
+
+    .nav-label {
+      color: #94a3b8;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.1px;
+      font-weight: 700;
+      padding: 0 12px;
+      margin-bottom: 12px;
+    }
+
+    nav { display: grid; gap: 6px; }
+
+    nav button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #cbd5e1;
+      text-align: left;
+    }
+
+    nav button:hover { background: #1f2937; color: white; }
+    nav button.active { background: #2563eb; color: white; }
+    .nav-icon { width: 21px; text-align: center; font-size: 17px; }
+
+    .sidebar-bottom { margin-top: auto; padding-top: 30px; }
+    .sidebar-business {
+      padding: 13px;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .sidebar-business small { color: #9ca3af; display: block; margin-bottom: 5px; }
+    .sidebar-business strong { font-size: 13px; }
+
+    .main { min-width: 0; }
+
+    .topbar {
+      min-height: 88px;
+      padding: 20px 32px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .topbar h1 { font-size: 23px; margin-bottom: 5px; }
+    .topbar p { color: var(--muted); margin-bottom: 0; }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .branch-filter { width: 220px; }
+
+    .content { padding: 28px 32px; max-width: 1500px; margin: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .welcome { margin-bottom: 25px; }
+    .welcome h2 { font-size: 21px; margin-bottom: 8px; }
+    .welcome p { color: var(--muted); margin-bottom: 0; line-height: 1.6; }
 
     .metrics {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
+      gap: 18px;
+      margin-bottom: 25px;
     }
 
-    .metric-label { color: var(--muted); font-size: 13px; }
-    .metric-value { font-size: 29px; font-weight: bold; margin-top: 12px; }
+    .metric, .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, .025);
+    }
 
-    .toolbar {
+    .metric { padding: 22px; }
+    .metric-top { display: flex; align-items: center; justify-content: space-between; }
+    .metric-label { color: var(--muted); font-weight: 600; }
+    .metric-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-light);
+      font-size: 19px;
+    }
+
+    .metric-value { font-size: 30px; font-weight: 800; margin-top: 17px; }
+    .metric-note { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+      gap: 20px;
+    }
+
+    .card { padding: 22px; min-width: 0; }
+    .card-heading {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      flex-wrap: wrap;
       margin-bottom: 20px;
     }
 
-    select, input {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 11px;
-      background: white;
-      max-width: 100%;
+    .card-heading h2 { font-size: 17px; margin-bottom: 4px; }
+    .card-heading p { color: var(--muted); margin-bottom: 0; font-size: 12px; }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
     }
 
-    table { width: 100%; border-collapse: collapse; }
+    .section-header h2 { font-size: 21px; margin-bottom: 7px; }
+    .section-header p { color: var(--muted); margin-bottom: 0; line-height: 1.5; }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; }
     th, td {
-      text-align: left;
-      padding: 13px 10px;
+      padding: 13px 15px;
       border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      white-space: nowrap;
     }
 
-    th { color: var(--muted); font-weight: 600; }
-
-    .table-wrap { overflow-x: auto; }
-    .page { display: none; }
-    .page.active { display: block; }
-
-    .status {
-      background: #eff6ff;
-      color: #1d4ed8;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 12px;
+    th {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
     }
 
-    .logout {
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 8px;
-      padding: 10px 14px;
-      cursor: pointer;
+    td { font-size: 13px; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f8fafc; }
+    .empty { color: var(--muted); padding: 24px; text-align: center; }
+    .status { display: inline-block; padding: 5px 9px; border-radius: 20px; background: #f1f5f9; color: #475569; font-size: 12px; }
+    .search { max-width: 320px; margin-bottom: 18px; }
+
+    .raffle-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .raffle-card h3 { font-size: 17px; margin-bottom: 15px; }
+    .raffle-card p { line-height: 1.6; margin-bottom: 8px; color: #475569; }
+    .raffle-card strong { color: var(--text); }
+    .notice {
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: #1e40af;
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
 
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { padding: 16px; }
-      nav { display: flex; overflow-x: auto; gap: 5px; }
-      nav button { min-width: max-content; width: auto; }
+    .loading { opacity: .65; pointer-events: none; }
+
+    @media (max-width: 1100px) {
       .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      main { padding: 18px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 480px) {
-      .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .card { padding: 15px; }
-      h1 { font-size: 22px; }
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { min-height: auto; padding: 15px; }
+      .sidebar .brand { margin-bottom: 20px; }
+      .sidebar-bottom { display: none; }
+      .nav-label { margin-bottom: 8px; }
+      nav {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 5px;
+      }
+      nav button { width: auto; min-width: max-content; padding: 10px 12px; }
+      .topbar { padding: 18px; align-items: flex-start; flex-direction: column; }
+      .topbar-actions { width: 100%; flex-wrap: wrap; }
+      .branch-filter { width: 100%; flex: 1 1 180px; }
+      .content { padding: 20px 16px; }
+      .raffle-list { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; }
+    }
+
+    @media (max-width: 450px) {
+      .metrics { grid-template-columns: 1fr; gap: 12px; }
+      .metric { padding: 18px; }
+      .metric-value { font-size: 27px; }
+      .login-card { padding: 25px 20px; }
+      .topbar h1 { font-size: 20px; }
     }
   </style>
 </head>
+
 <body>
-<div class="layout">
-  <aside>
-    <div class="brand">Cima</div>
-    <div class="subtitle">Panel de tu negocio</div>
-
-    <nav>
-      <button class="active" data-page="dashboard">Resumen</button>
-      <button data-page="ranking">Ranking</button>
-      <button data-page="clientes">Clientes</button>
-      <button data-page="preguntas">Preguntas</button>
-      <button data-page="premios">Premios</button>
-      <button data-page="rifas">Rifas</button>
-    </nav>
-  </aside>
-
-  <main>
-    <header>
-      <div>
-        <h1 id="tituloPagina">Resumen del negocio</h1>
-        <p id="nombreNegocio">Cargando negocio...</p>
+  <!-- Inicio de sesión -->
+  <section id="loginScreen" class="login-wrapper">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div>
+          <div class="brand-name">Cima</div>
+          <div class="brand-subtitle">Panel para negocios</div>
+        </div>
       </div>
-      <button class="logout" id="btnCerrarSesion">Cerrar sesión</button>
-    </header>
 
-    <div class="toolbar">
-      <label>
-        <span class="metric-label">Sucursal</span><br>
-        <select id="filtroSucursal">
-          <option value="">Todas las sucursales</option>
-        </select>
-      </label>
+      <h1>Bienvenido</h1>
+      <p class="login-description muted">
+        Inicia sesión para consultar la actividad y los resultados de tu negocio.
+      </p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Correo electrónico</label>
+          <input id="loginEmail" type="email" autocomplete="username"
+                 placeholder="tu@negocio.com" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <input id="loginPassword" type="password"
+                 autocomplete="current-password" required>
+        </div>
+
+        <button id="btnLogin" class="btn btn-primary btn-full" type="submit">
+          Iniciar sesión
+        </button>
+        <p id="loginError" class="error" role="alert"></p>
+      </form>
     </div>
+  </section>
 
-    <section id="page-dashboard" class="page active">
-      <div class="metrics">
-        <div class="card">
-          <div class="metric-label">Clientes registrados</div>
-          <div class="metric-value" id="clientesTotal">—</div>
-        </div>
-        <div class="card">
-          <div class="metric-label">Partidas jugadas</div>
-          <div class="metric-value" id="partidasTotal">—</div>
-        </div>
-        <div class="card">
-          <div class="metric-label">Participantes del mes</div>
-          <div class="metric-value" id="participantesTotal">—</div>
-        </div>
-        <div class="card">
-          <div class="metric-label">Premios activos</div>
-          <div class="metric-value" id="premiosTotal">—</div>
+  <!-- Panel principal: permanece oculto hasta autenticar al negocio -->
+  <div class="layout hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div>
+          <div class="brand-name">Cima</div>
+          <div class="brand-subtitle">Panel del negocio</div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>Ranking del mes</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Posición</th><th>Cliente</th><th>Puntos</th></tr></thead>
-            <tbody id="tablaRanking"><tr><td colspan="3">Cargando...</td></tr></tbody>
-          </table>
+      <div class="nav-label">Administración</div>
+
+      <nav aria-label="Navegación principal">
+        <button type="button" class="active" data-page="dashboard">
+          <span class="nav-icon">▦</span> Resumen
+        </button>
+        <button type="button" data-page="ranking">
+          <span class="nav-icon">🏆</span> Ranking
+        </button>
+        <button type="button" data-page="clientes">
+          <span class="nav-icon">♙</span> Clientes
+        </button>
+        <button type="button" data-page="preguntas">
+          <span class="nav-icon">?</span> Preguntas
+        </button>
+        <button type="button" data-page="premios">
+          <span class="nav-icon">🎁</span> Premios
+        </button>
+        <button type="button" data-page="rifas">
+          <span class="nav-icon">🎟</span> Rifas
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-business">
+          <small>Negocio conectado</small>
+          <strong id="nombreNegocioSidebar">Cargando...</strong>
         </div>
+        <button type="button" id="btnCerrarSesionSidebar"
+                class="btn btn-secondary btn-full">
+          Cerrar sesión
+        </button>
       </div>
+    </aside>
 
-      <div class="card">
-        <h2>Resumen de rifas</h2>
-        <div id="resumenRifas">Cargando...</div>
-      </div>
-    </section>
-
-    <section id="page-ranking" class="page">
-      <div class="card">
-        <h2>Ranking del mes</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Posición</th><th>Cliente</th><th>Puntos</th></tr></thead>
-            <tbody id="tablaRankingCompleto"></tbody>
-          </table>
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="tituloPagina">Resumen del negocio</h1>
+          <p id="subtituloPagina">Consulta la actividad de tus clientes.</p>
         </div>
-      </div>
-    </section>
 
-    <section id="page-clientes" class="page">
-      <div class="card">
-        <h2>Clientes registrados</h2>
-        <input id="buscarCliente" placeholder="Buscar cliente...">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th></tr></thead>
-            <tbody id="tablaClientes"><tr><td colspan="3">Cargando...</td></tr></tbody>
-          </table>
+        <div class="topbar-actions">
+          <select id="filtroSucursal" class="branch-filter"
+                  aria-label="Filtrar por sucursal">
+            <option value="">Todas las sucursales</option>
+          </select>
+          <button type="button" id="btnCerrarSesion"
+                  class="btn btn-secondary">
+            Salir
+          </button>
         </div>
+      </header>
+
+      <div class="content">
+        <!-- Resumen -->
+        <section id="page-dashboard" class="page active">
+          <div class="welcome">
+            <h2>Actividad de tu negocio</h2>
+            <p>Revisa la participación de tus clientes y el estado de tu programa Cima.</p>
+          </div>
+
+          <div id="dashboardError" class="notice hidden"></div>
+
+          <div class="metrics">
+            <article class="metric">
+              <div class="metric-top">
+                <span class="metric-label">Clientes registrados</span>
+                <span class="metric-icon">♙</span>
+              </div>
+              <div class="metric-value" id="clientesTotal">—</div>
+              <div class="metric-note">Clientes de tu negocio</div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-top">
+                <span class="metric-label">Partidas jugadas</span>
+                <span class="metric-icon">🎮</span>
+              </div>
+              <div class="metric-value" id="partidasTotal">—</div>
+              <div class="metric-note">Actividad registrada</div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-top">
+                <span class="metric-label">Participantes del mes</span>
+                <span class="metric-icon">👥</span>
+              </div>
+              <div class="metric-value" id="participantesTotal">—</div>
+              <div class="metric-note">Según el ranking mensual</div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-top">
+                <span class="metric-label">Premios activos</span>
+                <span class="metric-icon">🎁</span>
+              </div>
+              <div class="metric-value" id="premiosTotal">—</div>
+              <div class="metric-note">Premios configurados</div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="card">
+              <div class="card-heading">
+                <div>
+                  <h2>Ranking del mes</h2>
+                  <p>Participantes con más puntos.</p>
+                </div>
+                <button type="button" class="btn btn-secondary"
+                        data-go-page="ranking">Ver ranking</button>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Posición</th>
+                      <th>Cliente</th>
+                      <th>Puntos</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaRanking">
+                    <tr><td colspan="3" class="empty">Inicia sesión para cargar los datos.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-heading">
+                <div>
+                  <h2>Rifas</h2>
+                  <p>Estado de las rifas registradas.</p>
+                </div>
+                <button type="button" class="btn btn-secondary"
+                        data-go-page="rifas">Ver rifas</button>
+              </div>
+              <div id="resumenRifas">
+                <p class="muted">Los datos aparecerán al iniciar sesión.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Ranking -->
+        <section id="page-ranking" class="page">
+          <div class="section-header">
+            <div>
+              <h2>Ranking mensual</h2>
+              <p>Consulta la clasificación de los participantes de este mes.</p>
+            </div>
+          </div>
+
+          <article class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Posición</th>
+                    <th>Cliente</th>
+                    <th>Puntos</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaRankingCompleto">
+                  <tr><td colspan="3" class="empty">Sin datos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- Clientes -->
+        <section id="page-clientes" class="page">
+          <div class="section-header">
+            <div>
+              <h2>Clientes</h2>
+              <p>Consulta los clientes registrados en tu negocio.</p>
+            </div>
+          </div>
+
+          <input id="buscarCliente" class="search" type="search"
+                 placeholder="Buscar por nombre, correo o teléfono..."
+                 aria-label="Buscar cliente">
+
+          <article class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Correo electrónico</th>
+                    <th>Teléfono</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaClientes">
+                  <tr><td colspan="3" class="empty">Sin datos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- Preguntas -->
+        <section id="page-preguntas" class="page">
+          <div class="section-header">
+            <div>
+              <h2>Preguntas</h2>
+              <p>Consulta las preguntas disponibles en el juego.</p>
+            </div>
+          </div>
+
+          <article class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pregunta</th>
+                    <th>Puntos</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaPreguntas">
+                  <tr><td colspan="3" class="empty">Sin datos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- Premios -->
+        <section id="page-premios" class="page">
+          <div class="section-header">
+            <div>
+              <h2>Premios</h2>
+              <p>Consulta los premios configurados para tu negocio.</p>
+            </div>
+          </div>
+
+          <article class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Disponibles</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaPremios">
+                  <tr><td colspan="4" class="empty">Sin datos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- Rifas -->
+        <section id="page-rifas" class="page">
+          <div class="section-header">
+            <div>
+              <h2>Rifas</h2>
+              <p>Consulta participantes, entradas y resultados de las rifas.</p>
+            </div>
+          </div>
+
+          <div id="listaRifas" class="raffle-list">
+            <p class="muted">Sin datos.</p>
+          </div>
+        </section>
       </div>
-    </section>
+    </main>
+  </div>
 
-    <section id="page-preguntas" class="page">
-      <div class="card">
-        <h2>Preguntas del negocio</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Pregunta</th><th>Puntos</th><th>Estado</th></tr></thead>
-            <tbody id="tablaPreguntas"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+  <script>
+    'use strict';
 
-    <section id="page-premios" class="page">
-      <div class="card">
-        <h2>Premios disponibles</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Premio</th><th>Tipo</th><th>Disponibles</th><th>Estado</th></tr></thead>
-            <tbody id="tablaPremios"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    const API = 'https://cima-api.jeffryblnc.workers.dev/';
 
-    <section id="page-rifas" class="page">
-      <div class="card">
-        <h2>Rifas y participantes</h2>
-        <div id="listaRifas">Cargando...</div>
-      </div>
-    </section>
-  </main>
-</div>
+    let tokenAdmin = '';
+    let contextoAdmin = null;
+    let sucursalId = '';
+    let clientesCargados = [];
 
-<script>
-  document.querySelectorAll('nav button').forEach(boton => {
-    boton.addEventListener('click', () => {
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const $ = id => document.getElementById(id);
 
-      boton.classList.add('active');
-      document.getElementById('page-' + boton.dataset.page).classList.add('active');
+    const titulos = {
+      dashboard: 'Resumen del negocio',
+      ranking: 'Ranking',
+      clientes: 'Clientes',
+      preguntas: 'Preguntas',
+      premios: 'Premios',
+      rifas: 'Rifas'
+    };
 
-      const titulos = {
-        dashboard: 'Resumen del negocio',
-        ranking: 'Ranking',
-        clientes: 'Clientes',
-        preguntas: 'Preguntas',
-        premios: 'Premios',
-        rifas: 'Rifas'
-      };
+    const subtitulos = {
+      dashboard: 'Consulta la actividad de tus clientes.',
+      ranking: 'Clasificación mensual de participantes.',
+      clientes: 'Consulta los clientes registrados en tu negocio.',
+      preguntas: 'Consulta las preguntas disponibles en el juego.',
+      premios: 'Consulta los premios configurados para tu negocio.',
+      rifas: 'Consulta participantes y resultados de las rifas.'
+    };
 
-      document.getElementById('tituloPagina').textContent = titulos[boton.dataset.page];
+    async function ejecutar(accion, ...args) {
+      const respuesta = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ accion, args })
+      });
+
+      if (!respuesta.ok) {
+        throw new Error('No se pudo conectar con el servidor de Cima.');
+      }
+
+      const resultado = await respuesta.json();
+
+      if (!resultado.ok) {
+        throw new Error(resultado.error || 'Ocurrió un error al consultar los datos.');
+      }
+
+      return resultado.datos;
+    }
+
+    function escapar(valor) {
+      return String(valor ?? '').replace(/[&<>"']/g, caracter => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[caracter]);
+    }
+
+    function numero(valor) {
+      const n = Number(valor ?? 0);
+      return Number.isFinite(n) ? n.toLocaleString('es-CR') : '0';
+    }
+
+    function mostrarErrorLogin(mensaje) {
+      $('loginError').textContent = mensaje;
+    }
+
+    function mostrarErrorDashboard(mensaje) {
+      $('dashboardError').textContent = mensaje;
+      $('dashboardError').classList.toggle('hidden', !mensaje);
+    }
+
+    function mensajeTabla(id, columnas, mensaje) {
+      $(id).innerHTML =
+        `<tr><td colspan="${columnas}" class="empty">${escapar(mensaje)}</td></tr>`;
+    }
+
+    async function iniciarSesion(email, password) {
+      const sesion = await ejecutar('iniciarSesionAdmin', email, password);
+
+      if (!sesion || !sesion.usuario ||
+          sesion.usuario.rol !== 'NEGOCIO_ADMIN') {
+        throw new Error(
+          'Estas credenciales no corresponden a un administrador de negocio.'
+        );
+      }
+
+      if (!sesion.token) {
+        throw new Error('El servidor no devolvió un token de sesión.');
+      }
+
+      tokenAdmin = sesion.token;
+
+      contextoAdmin = await ejecutar('obtenerContextoAdmin', tokenAdmin);
+
+      if (
+        !contextoAdmin ||
+        !contextoAdmin.usuario ||
+        contextoAdmin.usuario.rol !== 'NEGOCIO_ADMIN' ||
+        !contextoAdmin.negocio
+      ) {
+        tokenAdmin = '';
+        contextoAdmin = null;
+        throw new Error('No se pudo cargar el negocio asignado a esta cuenta.');
+      }
+
+      $('loginScreen').classList.add('hidden');
+      document.querySelector('.layout').classList.remove('hidden');
+
+      const nombre = contextoAdmin.negocio.nombre || 'Mi negocio';
+      $('nombreNegocioSidebar').textContent = nombre;
+
+      const selector = $('filtroSucursal');
+      selector.innerHTML = '<option value="">Todas las sucursales</option>';
+
+      (Array.isArray(contextoAdmin.sucursales)
+        ? contextoAdmin.sucursales
+        : []
+      ).forEach(sucursal => {
+        const opcion = document.createElement('option');
+        opcion.value = sucursal.sucursal_id;
+        opcion.textContent = sucursal.nombre || sucursal.sucursal_id;
+        selector.appendChild(opcion);
+      });
+
+      sucursalId = '';
+      selector.value = '';
+      mostrarErrorDashboard('');
+      await cargarDashboard();
+    }
+
+    $('loginForm').addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const boton = $('btnLogin');
+      boton.disabled = true;
+      boton.textContent = 'Ingresando...';
+      mostrarErrorLogin('');
+
+      try {
+        await iniciarSesion(
+          $('loginEmail').value.trim(),
+          $('loginPassword').value
+        );
+      } catch (error) {
+        mostrarErrorLogin(error.message || 'No fue posible iniciar sesión.');
+      } finally {
+        boton.disabled = false;
+        boton.textContent = 'Iniciar sesión';
+      }
     });
-  });
-</script>
+
+    async function cargarDashboard() {
+      mostrarErrorDashboard('');
+
+      try {
+        const datos = await ejecutar(
+          'obtenerDashboardNegocioAdmin',
+          tokenAdmin,
+          sucursalId
+        );
+
+        $('clientesTotal').textContent = numero(datos.clientesRegistrados);
+        $('partidasTotal').textContent = numero(datos.partidasJugadas);
+        $('participantesTotal').textContent = numero(datos.participantesMes);
+
+        $('premiosTotal').textContent = numero(
+          Array.isArray(datos.premiosActivos)
+            ? datos.premiosActivos.length
+            : 0
+        );
+
+        const ranking = Array.isArray(datos.ranking) ? datos.ranking : [];
+        const filasRanking = ranking.map((item, indice) => `
+          <tr>
+            <td>${indice + 1}</td>
+            <td>${escapar(
+              item.nombre ||
+              item.cliente_nombre ||
+              item.nombre_cliente ||
+              item.cliente_id ||
+              'Cliente'
+            )}</td>
+            <td>${numero(item.puntos ?? item.total_puntos ?? 0)}</td>
+          </tr>
+        `).join('');
+
+        const contenidoRanking = filasRanking ||
+          '<tr><td colspan="3" class="empty">Todavía no hay participantes en el ranking.</td></tr>';
+
+        $('tablaRanking').innerHTML = contenidoRanking;
+        $('tablaRankingCompleto').innerHTML = contenidoRanking;
+
+        const rifas = Array.isArray(datos.rifas) ? datos.rifas : [];
+
+        $('resumenRifas').innerHTML = rifas.length
+          ? rifas.slice(0, 5).map(rifa => `
+              <div style="padding:12px 0;border-bottom:1px solid #e2e8f0">
+                <strong>${escapar(rifa.nombre || 'Rifa')}</strong>
+                <p class="muted" style="margin:7px 0">
+                  Estado: ${escapar(rifa.estado || 'Sin estado')}
+                </p>
+                <p class="muted" style="margin-bottom:0">
+                  Participantes: ${numero(rifa.cantidadParticipantes)}
+                </p>
+              </div>
+            `).join('')
+          : '<p class="muted">No hay rifas registradas.</p>';
+
+      } catch (error) {
+        mostrarErrorDashboard(error.message);
+        throw error;
+      }
+    }
+
+    async function cargarClientes() {
+      const datos = await ejecutar(
+        'obtenerClientesAdmin',
+        tokenAdmin,
+        contextoAdmin.negocio.negocio_id,
+        sucursalId
+      );
+
+      clientesCargados = Array.isArray(datos) ? datos : [];
+      renderizarClientes();
+    }
+
+    function renderizarClientes() {
+      const filtro = $('buscarCliente').value.toLowerCase().trim();
+
+      const filtrados = clientesCargados.filter(cliente =>
+        [
+          cliente.nombre,
+          cliente.email,
+          cliente.telefono
+        ].some(valor => String(valor ?? '').toLowerCase().includes(filtro))
+      );
+
+      $('tablaClientes').innerHTML = filtrados.length
+        ? filtrados.map(cliente => `
+            <tr>
+              <td>${escapar(cliente.nombre || '—')}</td>
+              <td>${escapar(cliente.email || '—')}</td>
+              <td>${escapar(cliente.telefono || '—')}</td>
+            </tr>
+          `).join('')
+        : '<tr><td colspan="3" class="empty">No se encontraron clientes.</td></tr>';
+    }
+
+    async function cargarPreguntas() {
+      const datos = await ejecutar(
+        'obtenerPreguntasAdmin',
+        tokenAdmin,
+        contextoAdmin.negocio.negocio_id
+      );
+
+      const preguntas = Array.isArray(datos) ? datos : [];
+
+      $('tablaPreguntas').innerHTML = preguntas.length
+        ? preguntas.map(pregunta => `
+            <tr>
+              <td>${escapar(pregunta.pregunta || pregunta.texto || '—')}</td>
+              <td>${numero(pregunta.puntos)}</td>
+              <td><span class="status">${escapar(pregunta.estado || '—')}</span></td>
+            </tr>
+          `).join('')
+        : '<tr><td colspan="3" class="empty">No hay preguntas disponibles.</td></tr>';
+    }
+
+    async function cargarPremios() {
+      const datos = await ejecutar(
+        'obtenerPremiosAdmin',
+        tokenAdmin,
+        contextoAdmin.negocio.negocio_id
+      );
+
+      const premios = Array.isArray(datos) ? datos : [];
+
+      $('tablaPremios').innerHTML = premios.length
+        ? premios.map(premio => `
+            <tr>
+              <td>${escapar(premio.nombre || '—')}</td>
+              <td>${escapar(premio.tipo || '—')}</td>
+              <td>${numero(premio.cantidad_disponible)}</td>
+              <td><span class="status">${escapar(premio.estado || '—')}</span></td>
+            </tr>
+          `).join('')
+        : '<tr><td colspan="4" class="empty">No hay premios registrados.</td></tr>';
+    }
+
+    async function cargarRifas() {
+      const datos = await ejecutar(
+        'obtenerResumenRifasAdmin',
+        tokenAdmin,
+        sucursalId
+      );
+
+      const rifas = Array.isArray(datos) ? datos : [];
+
+      $('listaRifas').innerHTML = rifas.length
+        ? rifas.map(rifa => `
+            <article class="card raffle-card">
+              <h3>${escapar(rifa.nombre || 'Rifa')}</h3>
+              <p><strong>Premio:</strong> ${escapar(rifa.premio || 'Sin especificar')}</p>
+              <p><strong>Estado:</strong> ${escapar(rifa.estado || 'Sin estado')}</p>
+              <p><strong>Participantes:</strong> ${numero(rifa.cantidadParticipantes)}</p>
+              <p><strong>Entradas:</strong> ${numero(rifa.cantidadEntradas)}</p>
+              <p><strong>Ganador:</strong> ${escapar(rifa.ganador_cliente_id || 'Pendiente')}</p>
+            </article>
+          `).join('')
+        : '<article class="card"><p class="empty">No hay rifas registradas.</p></article>';
+    }
+
+    async function cambiarPagina(pagina) {
+      if (!titulos[pagina]) return;
+
+      document.querySelectorAll('nav button[data-page]').forEach(boton => {
+        boton.classList.toggle('active', boton.dataset.page === pagina);
+      });
+
+      document.querySelectorAll('.page').forEach(seccion => {
+        seccion.classList.toggle('active', seccion.id === 'page-' + pagina);
+      });
+
+      $('tituloPagina').textContent = titulos[pagina];
+      $('subtituloPagina').textContent = subtitulos[pagina];
+
+      try {
+        if (pagina === 'dashboard' || pagina === 'ranking') {
+          await cargarDashboard();
+        } else if (pagina === 'clientes') {
+          await cargarClientes();
+        } else if (pagina === 'preguntas') {
+          await cargarPreguntas();
+        } else if (pagina === 'premios') {
+          await cargarPremios();
+        } else if (pagina === 'rifas') {
+          await cargarRifas();
+        }
+      } catch (error) {
+        alert(error.message || 'No se pudieron cargar los datos.');
+      }
+    }
+
+    document.querySelectorAll('nav button[data-page]').forEach(boton => {
+      boton.addEventListener('click', () => cambiarPagina(boton.dataset.page));
+    });
+
+    document.querySelectorAll('[data-go-page]').forEach(boton => {
+      boton.addEventListener('click', () => cambiarPagina(boton.dataset.goPage));
+    });
+
+    $('filtroSucursal').addEventListener('change', async event => {
+      sucursalId = event.target.value;
+
+      try {
+        await cargarDashboard();
+
+        const paginaActiva = document.querySelector('.page.active');
+        if (paginaActiva) {
+          const pagina = paginaActiva.id.replace('page-', '');
+
+          if (pagina === 'clientes') await cargarClientes();
+          if (pagina === 'rifas') await cargarRifas();
+        }
+      } catch (error) {
+        alert(error.message || 'No se pudieron actualizar los datos.');
+      }
+    });
+
+    $('buscarCliente').addEventListener('input', renderizarClientes);
+
+    function cerrarSesion() {
+      tokenAdmin = '';
+      contextoAdmin = null;
+      sucursalId = '';
+      clientesCargados = [];
+
+      $('loginForm').reset();
+      $('filtroSucursal').innerHTML =
+        '<option value="">Todas las sucursales</option>';
+
+      $('loginScreen').classList.remove('hidden');
+      document.querySelector('.layout').classList.add('hidden');
+      mostrarErrorLogin('');
+      mostrarErrorDashboard('');
+    }
+
+    $('btnCerrarSesion').addEventListener('click', cerrarSesion);
+    $('btnCerrarSesionSidebar').addEventListener('click', cerrarSesion);
+  </script>
 </body>
 </html>
