@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cima | Panel del negocio</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --background: #f5f7fb;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      background: #111827;
+      color: white;
+      padding: 24px 16px;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0 12px 8px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin: 0 12px 28px;
+      font-size: 13px;
+    }
+
+    nav button {
+      width: 100%;
+      display: block;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #d1d5db;
+      padding: 13px 12px;
+      text-align: left;
+      cursor: pointer;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    nav button.active,
+    nav button:hover {
+      background: #263449;
+      color: white;
+    }
+
+    main { padding: 30px; min-width: 0; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    h1 { margin: 0 0 8px; font-size: 27px; }
+    h2 { font-size: 19px; margin-top: 0; }
+    p { color: var(--muted); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric-label { color: var(--muted); font-size: 13px; }
+    .metric-value { font-size: 29px; font-weight: bold; margin-top: 12px; }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    select, input {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px;
+      background: white;
+      max-width: 100%;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    th { color: var(--muted); font-weight: 600; }
+
+    .table-wrap { overflow-x: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .status {
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .logout {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { padding: 16px; }
+      nav { display: flex; overflow-x: auto; gap: 5px; }
+      nav button { min-width: max-content; width: auto; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      main { padding: 18px; }
+    }
+
+    @media (max-width: 480px) {
+      .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .card { padding: 15px; }
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">Cima</div>
+    <div class="subtitle">Panel de tu negocio</div>
+
+    <nav>
+      <button class="active" data-page="dashboard">Resumen</button>
+      <button data-page="ranking">Ranking</button>
+      <button data-page="clientes">Clientes</button>
+      <button data-page="preguntas">Preguntas</button>
+      <button data-page="premios">Premios</button>
+      <button data-page="rifas">Rifas</button>
+    </nav>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <h1 id="tituloPagina">Resumen del negocio</h1>
+        <p id="nombreNegocio">Cargando negocio...</p>
+      </div>
+      <button class="logout" id="btnCerrarSesion">Cerrar sesión</button>
+    </header>
+
+    <div class="toolbar">
+      <label>
+        <span class="metric-label">Sucursal</span><br>
+        <select id="filtroSucursal">
+          <option value="">Todas las sucursales</option>
+        </select>
+      </label>
+    </div>
+
+    <section id="page-dashboard" class="page active">
+      <div class="metrics">
+        <div class="card">
+          <div class="metric-label">Clientes registrados</div>
+          <div class="metric-value" id="clientesTotal">—</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Partidas jugadas</div>
+          <div class="metric-value" id="partidasTotal">—</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Participantes del mes</div>
+          <div class="metric-value" id="participantesTotal">—</div>
+        </div>
+        <div class="card">
+          <div class="metric-label">Premios activos</div>
+          <div class="metric-value" id="premiosTotal">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Ranking del mes</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Posición</th><th>Cliente</th><th>Puntos</th></tr></thead>
+            <tbody id="tablaRanking"><tr><td colspan="3">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Resumen de rifas</h2>
+        <div id="resumenRifas">Cargando...</div>
+      </div>
+    </section>
+
+    <section id="page-ranking" class="page">
+      <div class="card">
+        <h2>Ranking del mes</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Posición</th><th>Cliente</th><th>Puntos</th></tr></thead>
+            <tbody id="tablaRankingCompleto"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-clientes" class="page">
+      <div class="card">
+        <h2>Clientes registrados</h2>
+        <input id="buscarCliente" placeholder="Buscar cliente...">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th></tr></thead>
+            <tbody id="tablaClientes"><tr><td colspan="3">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-preguntas" class="page">
+      <div class="card">
+        <h2>Preguntas del negocio</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pregunta</th><th>Puntos</th><th>Estado</th></tr></thead>
+            <tbody id="tablaPreguntas"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-premios" class="page">
+      <div class="card">
+        <h2>Premios disponibles</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Premio</th><th>Tipo</th><th>Disponibles</th><th>Estado</th></tr></thead>
+            <tbody id="tablaPremios"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-rifas" class="page">
+      <div class="card">
+        <h2>Rifas y participantes</h2>
+        <div id="listaRifas">Cargando...</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('nav button').forEach(boton => {
+    boton.addEventListener('click', () => {
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      boton.classList.add('active');
+      document.getElementById('page-' + boton.dataset.page).classList.add('active');
+
+      const titulos = {
+        dashboard: 'Resumen del negocio',
+        ranking: 'Ranking',
+        clientes: 'Clientes',
+        preguntas: 'Preguntas',
+        premios: 'Premios',
+        rifas: 'Rifas'
+      };
+
+      document.getElementById('tituloPagina').textContent = titulos[boton.dataset.page];
+    });
+  });
+</script>
+</body>
+</html>
