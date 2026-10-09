@@ -920,6 +920,13 @@
           </table>
 
         </div>
+        
+        <div class="panel" style="margin-top: 20px;">
+          <h3>Resumen de participantes y ganadores</h3>
+          <div id="resumenRifas">
+            <p>Cargando información de las rifas...</p>
+          </div>
+        </div>
 
       </section>
 
@@ -1938,29 +1945,24 @@ async function crearPremio() {
    RIFAS
 ========================= */
 
-async function cargarRifas() {
 
-  const tbody =
-    document.getElementById('rifasTable');
+async function cargarRifas() {
+  const tbody = document.getElementById('rifasTable');
 
   tbody.innerHTML =
     '<tr><td colspan="4">Cargando...</td></tr>';
 
   try {
-
-    const rifas =
-      await ejecutar(
-        'obtenerRifasAdmin',
-        tokenAdmin,
-        seleccion.negocioId
-      );
+    const rifas = await ejecutar(
+      'obtenerRifasAdmin',
+      tokenAdmin,
+      seleccion.negocioId
+    );
 
     tbody.innerHTML = '';
 
     rifas.forEach(rifa => {
-
-      const fila =
-        document.createElement('tr');
+      const fila = document.createElement('tr');
 
       fila.innerHTML = `
         <td>${escapar(rifa.nombre)}</td>
@@ -1970,23 +1972,20 @@ async function cargarRifas() {
       `;
 
       tbody.appendChild(fila);
-
     });
 
     if (!rifas.length) {
-
       tbody.innerHTML =
         '<tr><td colspan="4">No hay rifas.</td></tr>';
-
     }
 
-  } catch (error) {
+    // Cargar el resumen debajo de la tabla.
+    await cargarResumenRifas();
 
+  } catch (error) {
     tbody.innerHTML =
       `<tr><td colspan="4">${escapar(error.message)}</td></tr>`;
-
   }
-
 }
 
 
@@ -2128,7 +2127,6 @@ async function cargarSucursales() {
   }
 
 }
-
 
 async function crearSucursal() {
 
@@ -2299,7 +2297,6 @@ async function cerrarSesion() {
 
 }
 
-
 function cerrarSesionLocal() {
 
   localStorage.removeItem(
@@ -2328,6 +2325,48 @@ window.addEventListener(
 
   }
 );
+
+async function cargarResumenRifas() {
+  const contenedor = document.getElementById('resumenRifas');
+  if (!contenedor) return;
+
+  contenedor.innerHTML = '<p>Cargando información...</p>';
+
+  try {
+    const rifas = await ejecutar(
+      'obtenerResumenRifasAdmin',
+      tokenAdmin,
+      seleccion.sucursalId || ''
+    );
+
+    if (!Array.isArray(rifas) || rifas.length === 0) {
+      contenedor.innerHTML = '<p>No hay rifas registradas.</p>';
+      return;
+    }
+
+    contenedor.innerHTML = rifas.map(rifa => {
+      const ganador = rifa.ganador_cliente_id
+        ? escapar(rifa.ganador_cliente_id)
+        : 'Pendiente';
+
+      return `
+        <div style="border:1px solid #ddd;border-radius:8px;padding:14px;margin-bottom:12px;">
+          <h4>${escapar(rifa.nombre)}</h4>
+          <p><strong>Premio:</strong> ${escapar(rifa.premio || 'Sin especificar')}</p>
+          <p><strong>Estado:</strong> ${escapar(rifa.estado || 'Sin estado')}</p>
+          <p><strong>Participantes:</strong> ${rifa.cantidadParticipantes}</p>
+          <p><strong>Entradas:</strong> ${rifa.cantidadEntradas}</p>
+          <p><strong>Ganador:</strong> ${ganador}</p>
+          <p><strong>Fecha del sorteo:</strong> ${escapar(rifa.fecha_sorteo || 'Sin definir')}</p>
+        </div>
+      `;
+    }).join('');
+  } catch (error) {
+    contenedor.innerHTML =
+      '<p>No se pudo cargar el resumen de rifas.</p>';
+    mostrarMensaje(error.message, 'error');
+  }
+}
 
 </script>
 
