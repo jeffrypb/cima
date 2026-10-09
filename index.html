@@ -1072,8 +1072,8 @@ async function prepararPartida() {
       );
   
       await finalizarPartida();
-  
     } catch (error) {
+      document.getElementById('botonEnviarRespuestas').disabled = false;
       mostrarErrorTecnico(error);
     }
   }
@@ -1081,7 +1081,7 @@ async function prepararPartida() {
   /* =====================================================
      FINALIZAR PARTIDA
      ===================================================== */
-
+  
   async function finalizarPartida() {
 
   try {
