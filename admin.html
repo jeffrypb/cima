@@ -1197,133 +1197,115 @@ async function cargarAplicacion() {
 
 }
 
-
 /* =========================
    CONTEXTO
 ========================= */
 
 function configurarContexto() {
+  const rol = contextoAdmin.usuario.rol;
 
-  const rol =
-    contextoAdmin.usuario.rol;
-
-  const empresaSelector =
-    document.getElementById('empresaSelector');
-
-  const negocioSelector =
-    document.getElementById('negocioSelector');
-
-  const sucursalSelector =
-    document.getElementById('sucursalSelector');
-
+  const empresaSelector = document.getElementById('empresaSelector');
+  const negocioSelector = document.getElementById('negocioSelector');
+  const sucursalSelector = document.getElementById('sucursalSelector');
 
   empresaSelector.classList.add('hidden');
   negocioSelector.classList.add('hidden');
   sucursalSelector.classList.add('hidden');
 
-
-  if (rol === 'SUPERADMIN') {
-
-    empresaSelector.classList.remove('hidden');
-
-    llenarSelect(
-      empresaSelector,
-      contextoAdmin.empresas,
-      'empresa_id',
-      'nombre'
-    );
-
-    if (contextoAdmin.empresas.length) {
-
-      seleccion.empresaId =
-        contextoAdmin.empresas[0].empresa_id;
-
-      empresaSelector.value =
-        seleccion.empresaId;
-
-      cargarNegociosPorEmpresa();
-
-    }
-
-  }
-
-
-  if (rol === 'EMPRESA_ADMIN') {
-
-    negocioSelector.classList.remove('hidden');
-
-    llenarSelect(
-      negocioSelector,
-      contextoAdmin.negocios,
-      'negocio_id',
-      'nombre'
-    );
-
-    if (contextoAdmin.negocios.length) {
-
-      seleccion.negocioId =
-        contextoAdmin.negocios[0].negocio_id;
-
-      negocioSelector.value =
-        seleccion.negocioId;
-
-      cargarSucursalesPorNegocio();
-
-    }
-
-  }
-
+  // Mostrar u ocultar opciones del menú según el rol.
+  document.querySelectorAll('.menu-btn').forEach(boton => {
+  const accion = boton.getAttribute('onclick') || '';
 
   if (rol === 'NEGOCIO_ADMIN') {
+    if (
+      accion.includes("'sucursales'") ||
+      accion.includes("'configuracion'")
+    ) {
+      boton.classList.add('hidden');
+    } else {
+      boton.classList.remove('hidden');
+    }
+  } else {
+    boton.classList.remove('hidden');
+  }
 
-    negocioSelector.classList.remove('hidden');
+  });
 
-    llenarSelect(
+  if (rol === 'SUPERADMIN') {
+  empresaSelector.classList.remove('hidden');
+
+  llenarSelect(
+    empresaSelector,
+    contextoAdmin.empresas,
+    'empresa_id',
+    'nombre'
+  );
+
+  if (contextoAdmin.empresas.length) {
+    seleccion.empresaId = contextoAdmin.empresas[0].empresa_id;
+    empresaSelector.value = seleccion.empresaId;
+    cargarNegociosPorEmpresa();
+  }
+
+  }
+
+  if (rol === 'EMPRESA_ADMIN') {
+  negocioSelector.classList.remove('hidden');
+
+  llenarSelect(
+    negocioSelector,
+    contextoAdmin.negocios,
+    'negocio_id',
+    'nombre'
+  );
+
+  if (contextoAdmin.negocios.length) {
+    seleccion.negocioId = contextoAdmin.negocios[0].negocio_id;
+    negocioSelector.value = seleccion.negocioId;
+    cargarSucursalesPorNegocio();
+  }
+
+  }
+
+  if (rol === 'NEGOCIO_ADMIN') {
+  seleccion.negocioId = contextoAdmin.negocio.negocio_id;
+
+  negocioSelector.classList.remove('hidden');
+
+  llenarSelect(
       negocioSelector,
-      contextoAdmin.negocios,
+      [contextoAdmin.negocio],
       'negocio_id',
       'nombre'
     );
 
-    seleccion.negocioId =
-      contextoAdmin.negocio.negocio_id;
-
-    negocioSelector.value =
-      seleccion.negocioId;
-
+    negocioSelector.value = seleccion.negocioId;
     negocioSelector.disabled = true;
 
     cargarSucursalesPorNegocio();
 
-  }
 
+    }
 
   if (rol === 'SUCURSAL_ADMIN') {
+    seleccion.negocioId = contextoAdmin.negocio.negocio_id;
+    seleccion.sucursalId = contextoAdmin.sucursal.sucursal_id;
 
-    seleccion.negocioId =
-      contextoAdmin.negocio.negocio_id;
-
-    seleccion.sucursalId =
-      contextoAdmin.sucursal.sucursal_id;
 
     sucursalSelector.classList.remove('hidden');
 
-    llenarSelect(
-      sucursalSelector,
-      contextoAdmin.sucursales,
-      'sucursal_id',
-      'nombre'
-    );
+      llenarSelect(
+        sucursalSelector,
+        contextoAdmin.sucursales,
+        'sucursal_id',
+        'nombre'
+      );
 
-    sucursalSelector.value =
-      seleccion.sucursalId;
-
+    sucursalSelector.value = seleccion.sucursalId;
     sucursalSelector.disabled = true;
 
-  }
-
+    }
 }
-
 
 function llenarSelect(
   select,
@@ -1352,7 +1334,6 @@ function llenarSelect(
 
 }
 
-
 async function cambiarEmpresa() {
 
   seleccion.empresaId =
@@ -1364,7 +1345,6 @@ async function cambiarEmpresa() {
   await cargarNegociosPorEmpresa();
 
 }
-
 
 async function cargarNegociosPorEmpresa() {
 
@@ -1415,7 +1395,6 @@ async function cargarNegociosPorEmpresa() {
 
 }
 
-
 async function cambiarNegocio() {
 
   seleccion.negocioId =
@@ -1426,7 +1405,6 @@ async function cambiarNegocio() {
   await cargarSucursalesPorNegocio();
 
 }
-
 
 async function cargarSucursalesPorNegocio() {
 
@@ -1481,7 +1459,6 @@ function cambiarSucursal() {
 
 }
 
-
 /* =========================
    DASHBOARD
 ========================= */
@@ -1533,7 +1510,6 @@ async function cargarDashboard() {
     contextoAdmin.sucursales.length;
 
 }
-
 
 /* =========================
    NAVEGACIÓN
@@ -1591,7 +1567,6 @@ function mostrarPagina(nombre, boton) {
   }
 
 }
-
 
 /* =========================
    RANKING
@@ -1656,7 +1631,6 @@ async function cargarRanking() {
 
 }
 
-
 /* =========================
    CLIENTES
 ========================= */
@@ -1713,7 +1687,6 @@ async function cargarClientes() {
 
 }
 
-
 /* =========================
    PREGUNTAS
 ========================= */
@@ -1768,7 +1741,6 @@ async function cargarPreguntas() {
   }
 
 }
-
 
 async function crearPregunta() {
 
@@ -1832,7 +1804,6 @@ async function crearPregunta() {
 
 }
 
-
 /* =========================
    PREMIOS
 ========================= */
@@ -1888,7 +1859,6 @@ async function cargarPremios() {
 
 }
 
-
 async function crearPremio() {
 
   if (!seleccion.negocioId) {
@@ -1940,11 +1910,9 @@ async function crearPremio() {
 
 }
 
-
 /* =========================
    RIFAS
 ========================= */
-
 
 async function cargarRifas() {
   const tbody = document.getElementById('rifasTable');
