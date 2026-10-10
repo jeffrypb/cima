@@ -218,6 +218,24 @@
     .opcion:has(input:checked) { border-color: var(--cima-turquesa); background: var(--cima-turquesa-claro); color: #0b6259; box-shadow: inset 0 0 0 1px var(--cima-turquesa); }
     .opcion input { width: 17px; height: 17px; margin: 0; accent-color: var(--cima-turquesa); flex: 0 0 auto; }
 
+
+    .aviso-rifa {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 15px 16px;
+      margin: 0 0 18px;
+      border-radius: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .aviso-rifa .aviso-icono { font-size: 25px; line-height: 1.2; flex: 0 0 auto; }
+    .aviso-rifa strong { display: block; margin-bottom: 3px; }
+    .aviso-rifa p { margin: 0; color: inherit; }
+    .aviso-rifa.informativo { background: linear-gradient(135deg, #fff8e7, #fffdf5); border: 1px solid #f3dda0; color: #71500b; }
+    .aviso-rifa.exito { background: linear-gradient(135deg, #e4fbf5, #eff8ff); border: 1px solid #bdeee5; color: #075f55; }
+    .aviso-rifa.atencion { background: #fff8e7; border: 1px solid #f3dda0; color: #71500b; }
+
     .resultado-puntos {
       text-align: center;
       font-size: 38px;
@@ -339,6 +357,14 @@
         class="sucursal">
       </div>
 
+    </div>
+
+    <div class="aviso-rifa informativo">
+      <div class="aviso-icono">🎁</div>
+      <div>
+        <strong>¡También puedes participar en la rifa!</strong>
+        <p>Completa tu partida durante el periodo activo de una rifa y tu entrada se registrará automáticamente.</p>
+      </div>
     </div>
 
     <button
@@ -585,6 +611,11 @@
       id="resultadoPuntos"
       class="resultado-puntos">
       0 puntos
+    </div>
+
+    <div id="avisoRifaResultado" class="aviso-rifa informativo" role="status" aria-live="polite">
+      <div class="aviso-icono">🎁</div>
+      <div><strong>Revisando tu participación en la rifa...</strong></div>
     </div>
 
     <p style="text-align:center;">
@@ -1238,6 +1269,33 @@ async function prepararPartida() {
       'resultadoPuntos'
     ).textContent =
       `${resultado.puntos_obtenidos} puntos`;
+
+    const avisoRifa = document.getElementById('avisoRifaResultado');
+    const entradasRegistradas = Number(resultado.rifas_registradas || 0);
+    const rifasActivas = Number(resultado.rifas_activas || 0);
+
+    if (entradasRegistradas > 0) {
+      avisoRifa.className = 'aviso-rifa exito';
+      avisoRifa.innerHTML = `
+        <div class="aviso-icono">🎉</div>
+        <div><strong>¡Tu participación en la rifa está registrada!</strong>
+        <p>Tu partida quedó completada y tu entrada se registró correctamente.</p></div>
+      `;
+    } else if (rifasActivas > 0) {
+      avisoRifa.className = 'aviso-rifa atencion';
+      avisoRifa.innerHTML = `
+        <div class="aviso-icono">⚠️</div>
+        <div><strong>No pudimos confirmar tu entrada a la rifa.</strong>
+        <p>Tu partida se completó, pero consulta con el personal del negocio para verificar tu participación.</p></div>
+      `;
+    } else {
+      avisoRifa.className = 'aviso-rifa informativo';
+      avisoRifa.innerHTML = `
+        <div class="aviso-icono">🎁</div>
+        <div><strong>No hay una rifa activa en este momento.</strong>
+        <p>Podrás participar automáticamente al completar una partida durante el periodo de una rifa activa.</p></div>
+      `;
+    }
 
     mostrarPantalla(
       'pantallaResultado'
