@@ -1187,7 +1187,7 @@ async function prepararPartida() {
     );
 
     enviarSiguienteRespuesta(
-      0
+      
     );
   }
 
@@ -1196,55 +1196,27 @@ async function prepararPartida() {
      PROCESAMIENTO SECUENCIAL
      ===================================================== */
 
-  async function enviarSiguienteRespuesta(
-  indice
-) {
-
-  if (
-    indice >=
-    respuestasActuales.length
-  ) {
-
-    finalizarPartida();
-
-    return;
-  }
-
-  const respuesta =
-    respuestasActuales[
-      indice
-    ];
-
+async function enviarSiguienteRespuesta() {
   try {
-
     await llamarAPI(
-      'registrarRespuesta',
+      'registrarRespuestas',
       sesionActual.token,
       participacionActual,
-      respuesta.pregunta_id,
-      respuesta.respuesta
+      respuestasActuales
     );
 
-    enviarSiguienteRespuesta(
-      indice + 1
-    );
+    await finalizarPartida();
 
   } catch (error) {
-
     mostrarErrorTecnico(error);
-
   }
 }
-
-
   /* =====================================================
      FINALIZAR PARTIDA
      ===================================================== */
-
-  async function finalizarPartida() {
-
+  
+async function finalizarPartida() {
   try {
-
     const resultado = await llamarAPI(
       'finalizarParticipacion',
       sesionActual.token,
@@ -1254,13 +1226,9 @@ async function prepararPartida() {
     partidaFinalizada(resultado);
 
   } catch (error) {
-
     mostrarErrorTecnico(error);
-
   }
 }
-
-
   function partidaFinalizada(
     resultado
   ) {
